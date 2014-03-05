@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+  <Identifier Id="0b3a4d0f-e82c-4de4-a384-f74290776876">
+    <Name>Open XML Package Editor for Visual Studio</Name>
+    <Author>Microsoft</Author>
+    <Version>1.1</Version>
+    <Description xml:space="preserve">Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel and PowerPoint documents.</Description>
+    <Locale>1033</Locale>
+    <License>eula.1033.txt</License>
+    <Icon>File.ico</Icon>
+    <SupportedProducts>
+      <VisualStudio Version="10.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Pro</Edition>
+      </VisualStudio>
+      <VisualStudio Version="11.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Pro</Edition>
+      </VisualStudio>
+      <VisualStudio Version="12.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Pro</Edition>
+      </VisualStudio>
+    </SupportedProducts>
+    <SupportedFrameworkRuntimeEdition MinVersion="3.5" MaxVersion="4.5" />
+  </Identifier>
+  <References>
+    <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0" MaxVersion="13.0">
+      <Name>Visual Studio MPF</Name>
+    </Reference>
+  </References>
+  <Content>
+    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
+    <CustomExtension Type="Microsoft Office SmartArt Graphic Color Variation">Templates\default.gcsx</CustomExtension>
+    <CustomExtension Type="Microsoft Office SmartArt Graphic Layout">Templates\default.glox</CustomExtension>
+    <CustomExtension Type="Microsoft Office SmartArt Graphic Quick Style">Templates\default.gqsx</CustomExtension>
+    <CustomExtension Type="Open XML Package Project">Templates\OpenXMLEditor.vsdir</CustomExtension>
+  </Content>
+</Vsix>

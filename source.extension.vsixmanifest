@@ -4,10 +4,10 @@
     <Name>Open XML Package Editor for Visual Studio</Name>
     <Author>Microsoft</Author>
     <Version>1.1</Version>
-    <Description xml:space="preserve">Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel and PowerPoint documents.</Description>
+    <Description xml:space="preserve">Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel. PowerPoint and Visio documents.</Description>
     <Locale>1033</Locale>
     <License>eula.1033.txt</License>
-    <Icon>File.ico</Icon>
+    <Icon>Package.ico</Icon>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>Ultimate</Edition>

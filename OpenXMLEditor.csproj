@@ -20,7 +20,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.OpenXMLEditor</RootNamespace>
     <ProjectGuid>{232D3565-0EAE-480E-B2DE-CE58A7F660E3}</ProjectGuid>
-    <ApplicationIcon>Resources\Package.ico</ApplicationIcon>
+    <ApplicationIcon>Package.ico</ApplicationIcon>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -180,7 +180,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Resources\File.ico">
+    <Content Include="Package.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -200,7 +200,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>

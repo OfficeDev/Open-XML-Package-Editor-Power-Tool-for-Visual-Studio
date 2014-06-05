@@ -1,6 +1,6 @@
 Open XML Package Editor Power Tool for Visual Studio
 =============
-This Power Tool is a Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel and PowerPoint documents. This Power Tool enables you to do the following tasks:
+This Power Tool is a Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel, PowerPoint and Visio documents. This Power Tool enables you to do the following tasks:
 
 * Open any Open XML Package file or XPS Package file directly in Visual Studio 2010/2012/2013
 * Browse the contents of Package files in a tree view
@@ -12,4 +12,6 @@ This Power Tool is a Visual Studio add-in that provides an easy way to parse and
 
 The project is designed to be edited in VS2010, but can be one-way converted to VS2012 or VS2013.
 
-To compile this Visual Studio add-on you need the SDK for Visual Studio 2010: http://www.microsoft.com/en-us/download/details.aspx?id=2680
+To compile this Visual Studio add-on you need the [SDK for Visual Studio 2010] (http://www.microsoft.com/en-us/download/details.aspx?id=2680).
+
+The compiled version of this Power Tool is available for [download on the Visual Studio Gallery] (http://visualstudiogallery.msdn.microsoft.com/450a00e3-5a7d-4776-be2c-8aa8cec2a75b).

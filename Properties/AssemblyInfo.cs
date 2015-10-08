@@ -6,4 +6,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescriptionAttribute("Open XML Package Editor for Visual Studio")]
 [assembly: AssemblyCompanyAttribute("Microsoft Corporation")]
 [assembly: AssemblyProductAttribute("Visual Studio Power Tools")]
-[assembly: AssemblyCopyrightAttribute("(c) 2014, Microsoft Corporation")]
+[assembly: AssemblyCopyrightAttribute("(c) 2015, Microsoft Corporation")]

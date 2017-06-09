@@ -1,47 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
-  <Identifier Id="0b3a4d0f-e82c-4de4-a384-f74290776876">
-    <Name>Open XML Package Editor for Visual Studio</Name>
-    <Author>Microsoft</Author>
-    <Version>1.1</Version>
-    <Description xml:space="preserve">Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel. PowerPoint and Visio documents.</Description>
-    <Locale>1033</Locale>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="0b3a4d0f-e82c-4de4-a384-f74290776876" Version="2.0" Language="en-US" Publisher="Microsoft"/>
+    <DisplayName>Open XML Package Editor for Visual Studio</DisplayName>
+    <Description xml:space="preserve">Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel, PowerPoint and Visio documents.</Description>
     <License>eula.1033.txt</License>
     <Icon>Package.ico</Icon>
-    <SupportedProducts>
-      <VisualStudio Version="10.0">
-        <Edition>Ultimate</Edition>
-        <Edition>Premium</Edition>
-        <Edition>Pro</Edition>
-      </VisualStudio>
-      <VisualStudio Version="11.0">
-        <Edition>Ultimate</Edition>
-        <Edition>Premium</Edition>
-        <Edition>Pro</Edition>
-      </VisualStudio>
-      <VisualStudio Version="12.0">
-        <Edition>Ultimate</Edition>
-        <Edition>Premium</Edition>
-        <Edition>Pro</Edition>
-      </VisualStudio>
-      <VisualStudio Version="14.0">
-        <Edition>Ultimate</Edition>
-        <Edition>Premium</Edition>
-        <Edition>Pro</Edition>
-      </VisualStudio>
-    </SupportedProducts>
-    <SupportedFrameworkRuntimeEdition MinVersion="3.5" MaxVersion="4.6" />
-  </Identifier>
-  <References>
-    <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0" MaxVersion="14.0">
-      <Name>Visual Studio MPF</Name>
-    </Reference>
-  </References>
-  <Content>
-    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
-    <CustomExtension Type="Microsoft Office SmartArt Graphic Color Variation">Templates\default.gcsx</CustomExtension>
-    <CustomExtension Type="Microsoft Office SmartArt Graphic Layout">Templates\default.glox</CustomExtension>
-    <CustomExtension Type="Microsoft Office SmartArt Graphic Quick Style">Templates\default.gqsx</CustomExtension>
-    <CustomExtension Type="Open XML Package Project">Templates\OpenXMLEditor.vsdir</CustomExtension>
-  </Content>
-</Vsix>
+  </Metadata>
+  <Installation InstalledByMsi="false">
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.Pro" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.Ultimate" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.Premium" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+    <Dependency Id="Microsoft.VisualStudio.MPF.11.0" DisplayName="Visual Studio MPF 11.0" d:Source="Installed" Version="11.0" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft Office SmartArt Graphic Color Variation" d:Source="File" Path="Templates\default.gcsx" />
+    <Asset Type="Microsoft Office SmartArt Graphic Layout" d:Source="File" Path="Templates\default.glox" />
+    <Asset Type="Microsoft Office SmartArt Graphic Quick Style" d:Source="File" Path="Templates\default.gqsx" />
+    <Asset Type="Open XML Package Project" d:Source="File" Path="Templates\OpenXMLEditor.vsdir" />
+  </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+</PackageManifest>

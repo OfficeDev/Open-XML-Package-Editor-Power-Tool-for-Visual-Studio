@@ -15,3 +15,6 @@ The project is designed to be edited in VS2010SP1, but can be one-way converted 
 To compile this Visual Studio add-on you need the [SDK for Visual Studio 2010 SP1] (http://www.microsoft.com/en-us/download/details.aspx?id=21835). **If you are getting mysterious errors about loading the csproj, you most likely haven't installed the SDK**.
 
 The compiled version of this Power Tool is available for [download on the Visual Studio Gallery] (http://visualstudiogallery.msdn.microsoft.com/450a00e3-5a7d-4776-be2c-8aa8cec2a75b) - please note that currently downloadable VSIX version does not support VS2015; update is in progress.
+
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.

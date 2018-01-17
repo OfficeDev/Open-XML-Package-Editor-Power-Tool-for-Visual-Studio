@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="0b3a4d0f-e82c-4de4-a384-f74290776876" Version="2.0" Language="en-US" Publisher="Microsoft"/>
-    <DisplayName>Open XML Package Editor for Visual Studio</DisplayName>
-    <Description xml:space="preserve">Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel, PowerPoint and Visio documents.</Description>
+    <Identity Id="ac41218c-c632-413c-b108-a9ecbbaabb90" Version="1.0.0" Language="en-US" Publisher="Borislav Ivanov"/>
+    <DisplayName>Open XML Package Editor for Modern Visual Studios</DisplayName>
+    <Description xml:space="preserve">Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel, PowerPoint and Visio documents.
+
+This extension is fork of the original Open XML Package Editor for Visual Studio extension by Microsoft, but updated to work with Visual Studio 2015-2017.</Description>
     <License>eula.1033.txt</License>
     <Icon>Package.ico</Icon>
   </Metadata>

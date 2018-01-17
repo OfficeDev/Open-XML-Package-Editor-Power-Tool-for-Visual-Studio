@@ -1,8 +1,8 @@
-Open XML Package Editor Power Tool for Visual Studio
+Open XML Package Editor Power Tool for Modern Visual Studios
 =============
 This Power Tool is a Visual Studio add-in that provides an easy way to parse and edit Open Packaging Conventions files, including Word, Excel, PowerPoint and Visio documents. This Power Tool enables you to do the following tasks:
 
-* Open any Open XML Package file or XPS Package file directly in Visual Studio 2010SP1/2012/2013/2015
+* Open any Open XML Package file or XPS Package file directly in Visual Studio 2012/2013/2015/2017
 * Browse the contents of Package files in a tree view
 * Open any XML part directly in Visual Studio's rich XML editor
 * Add or remove parts and relationships directly in the user interface
@@ -10,8 +10,8 @@ This Power Tool is a Visual Studio add-in that provides an easy way to parse and
 * Detect when a Package file that is opened in Visual Studio is modified externally. The Power Tool prompts the user to reload the file without having to close any open XML part editors
 * Create new Office Packages from a set of templates using Visual Studio's File > New dialog
 
-The project is designed to be edited in VS2010SP1, but can be one-way converted to VS2012, VS2013 or 2015.
+The extension is available on the Visual Studio Marketplace here: [Open XML Package Editor Power Tool for Modern Visual Studios](https://marketplace.visualstudio.com/items?itemName=bsivanov.OpenXMLPackageEditorforVisualStudio).
 
-To compile this Visual Studio add-on you need the [SDK for Visual Studio 2010 SP1] (http://www.microsoft.com/en-us/download/details.aspx?id=21835). **If you are getting mysterious errors about loading the csproj, you most likely haven't installed the SDK**.
+This extension is fork of the original [Open XML Package Editor Power Tool for Visual Studio](https://github.com/OfficeDev/Open-XML-Package-Editor-Power-Tool-for-Visual-Studio) (also available on the Visual Studio Marketplace [here](https://marketplace.visualstudio.com/items?itemName=ChrisRae.OpenXMLPackageEditorforVisualStudio)), but working on the modern versions on Visual Studio (2012/2013/2015/2017).
 
-The compiled version of this Power Tool is available for [download on the Visual Studio Gallery] (http://visualstudiogallery.msdn.microsoft.com/450a00e3-5a7d-4776-be2c-8aa8cec2a75b) - please note that currently downloadable VSIX version does not support VS2015; update is in progress.
+To compile the add-on yourself, you need Visual Studio 2017 with 'Visual Studio extension development' workload installed.

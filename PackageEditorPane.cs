@@ -168,6 +168,7 @@ namespace Microsoft.OpenXMLEditor
 
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
+            this.treeView.Font = VsShellUtilities.GetEnvironmentFont(package);
         }
 
         private void PrivateInit(OpenXMLEditor package)

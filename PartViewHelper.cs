@@ -27,14 +27,12 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.OpenXMLEditor
 {
-    class PartViewHelper :    IVsWindowFrameNotify3,
-                            IVsTextLinesEvents
+    internal class PartViewHelper : IVsWindowFrameNotify3, IVsTextLinesEvents
     {
         #region Members
 
-        private IVsWindowFrame windowFrame;
-        private PackageEditorPane editor;
-        private IVsTextLines textLines;
+        private readonly IVsWindowFrame windowFrame;
+        private readonly IVsTextLines textLines;
 
         private uint textLinesEventsCookie;
         // private uint finalTextChangeCommitEventsCookie; // Is this used now?
@@ -48,11 +46,10 @@ namespace Microsoft.OpenXMLEditor
         public PartViewHelper(PackageEditorPane editor, IVsWindowFrame windowFrame)
         {
             this.windowFrame = windowFrame;
-            this.editor = editor;
+            this.Editor = editor;
             justOpened = true;
 
-            object data;
-            ErrorHandler.ThrowOnFailure(windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocData, out data));
+            ErrorHandler.ThrowOnFailure(windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocData, out object data));
             textLines = (IVsTextLines)data;
 
             AdviseTextLinesEvents(true);
@@ -67,18 +64,16 @@ namespace Microsoft.OpenXMLEditor
         {
             get
             {
-                int lineCount;
-                int lengthOfLast;
                 string bufferText = string.Empty;
 
                 ErrorHandler.ThrowOnFailure(
-                    this.textLines.GetLineCount(out lineCount)
+                    this.textLines.GetLineCount(out int lineCount)
                 );
 
                 if (lineCount > 0)
                 {
                     ErrorHandler.ThrowOnFailure(
-                        this.textLines.GetLengthOfLine(lineCount - 1, out lengthOfLast)
+                        this.textLines.GetLengthOfLine(lineCount - 1, out int lengthOfLast)
                     );
 
                     ErrorHandler.ThrowOnFailure(
@@ -89,13 +84,11 @@ namespace Microsoft.OpenXMLEditor
             }
             set
             {
-                int lastLine;
-                int lastColumn;
-                Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(
-                    textLines.GetLastLineIndex(out lastLine, out lastColumn));
+                ErrorHandler.ThrowOnFailure(
+                    textLines.GetLastLineIndex(out int lastLine, out int lastColumn));
 
                 // Lock the buffer before changing its content.
-                Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(
+                ErrorHandler.ThrowOnFailure(
                     textLines.LockBuffer());
                 try
                 {
@@ -103,7 +96,7 @@ namespace Microsoft.OpenXMLEditor
                     try
                     {
                         TextSpan[] span = new TextSpan[1];
-                        Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(
+                        ErrorHandler.ThrowOnFailure(
                             textLines.ReplaceLines(0, 0, lastLine, lastColumn, handle.AddrOfPinnedObject(), value.Length, span));
                     }
                     finally
@@ -123,14 +116,12 @@ namespace Microsoft.OpenXMLEditor
         {
             get
             {
-                uint flags;
-                ErrorHandler.ThrowOnFailure(this.textLines.GetStateFlags(out flags));
+                ErrorHandler.ThrowOnFailure(this.textLines.GetStateFlags(out uint flags));
                 return (flags & (uint)BUFFERSTATEFLAGS.BSF_MODIFIED) != 0;
             }
             set
             {
-                uint flags = 0;
-                ErrorHandler.ThrowOnFailure(textLines.GetStateFlags(out flags));
+                ErrorHandler.ThrowOnFailure(textLines.GetStateFlags(out uint flags));
                 bool fStar = (flags & (uint)BUFFERSTATEFLAGS.BSF_MODIFIED) != 0;
                 if (fStar != value)
                 {
@@ -153,21 +144,14 @@ namespace Microsoft.OpenXMLEditor
         {
             get
             {
-                object obj;
-                if (ErrorHandler.Succeeded(this.windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_pszPhysicalView, out obj)))
+                if (ErrorHandler.Succeeded(this.windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_pszPhysicalView, out object obj)))
                     return obj as string;
                 return null;
             }
         }
 
-        public PackageEditorPane Editor
-        {
-            get
-            {
-                return editor;
-            }
-        }
-        
+        public PackageEditorPane Editor { get; }
+
         #endregion Properties
 
         #region Methods
@@ -179,13 +163,13 @@ namespace Microsoft.OpenXMLEditor
 
         public void ReloadView()
         {
-            if (!this.editor.PartExits(PhysicalView))
+            if (!this.Editor.PartExits(PhysicalView))
             {
                 this.IsModified = false;
                 CloseWindow();
                 return;
             }
-            BufferContents = this.editor.GetXml(PhysicalView);
+            BufferContents = this.Editor.GetXml(PhysicalView);
             this.IsModified = false;
         }
 
@@ -193,7 +177,7 @@ namespace Microsoft.OpenXMLEditor
         {
             if (!this.IsModified)
                 return;
-            this.editor.UpdateXml(PhysicalView, BufferContents);
+            this.Editor.UpdateXml(PhysicalView, BufferContents);
         }
 
         public void Show()
@@ -214,9 +198,8 @@ namespace Microsoft.OpenXMLEditor
             conPtCont = (IConnectionPointContainer)textLines;
             if (conPtCont != null)
             {
-                IConnectionPoint conPt;
                 Guid iidConPt = typeof(IVsTextLinesEvents).GUID;
-                conPtCont.FindConnectionPoint(ref iidConPt, out conPt);
+                conPtCont.FindConnectionPoint(ref iidConPt, out IConnectionPoint conPt);
                 if (subscribe)
                 {
                     conPt.Advise((IVsTextLinesEvents)this, out textLinesEventsCookie);
@@ -234,9 +217,8 @@ namespace Microsoft.OpenXMLEditor
 
         private void UpdateStar(bool fStar)
         {
-            object editorCaptionObject;
             ErrorHandler.ThrowOnFailure(
-                this.windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_EditorCaption, out editorCaptionObject)
+                this.windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_EditorCaption, out object editorCaptionObject)
             );
 
             string editorCaption = (string)editorCaptionObject;
@@ -250,7 +232,7 @@ namespace Microsoft.OpenXMLEditor
                 }
 
                 // also dirty the parent editor
-                editor.IsModified = true;
+                Editor.IsModified = true;
             }
             else
             {
@@ -310,10 +292,9 @@ namespace Microsoft.OpenXMLEditor
             if (justOpened)
             {
                 justOpened = false;
-                string buffer;
                 if (pTextLineChange.Length == 1 && ErrorHandler.Succeeded(this.textLines.GetLineText(
                         pTextLineChange[0].iStartLine, pTextLineChange[0].iStartIndex,
-                        pTextLineChange[0].iNewEndLine, pTextLineChange[0].iNewEndIndex, out buffer)))
+                        pTextLineChange[0].iNewEndLine, pTextLineChange[0].iNewEndIndex, out string buffer)))
                 {
                     // Just opening the editor dirties the buffer and triggers this event *if* the 
                     // <?xml encoding=""?> attribute doesn't match the actual encoding of the buffer

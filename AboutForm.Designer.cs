@@ -171,8 +171,8 @@ namespace Microsoft.OpenXMLEditor
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AboutForm";
-            this.Shown += new System.EventHandler(this.AboutForm_Shown);
             this.Load += new System.EventHandler(this.AboutForm_Load);
+            this.Shown += new System.EventHandler(this.AboutForm_Shown);
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();

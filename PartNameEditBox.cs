@@ -65,7 +65,7 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private char[] illegalChars = new char[]
+        private readonly char[] illegalChars = new char[]
         {
             '\\', '/', ':', '*', '?', '\"', '<', '>', '|'
         };

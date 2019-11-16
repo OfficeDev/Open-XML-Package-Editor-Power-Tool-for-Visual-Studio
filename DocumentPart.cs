@@ -28,12 +28,11 @@ namespace Microsoft.OpenXMLEditor
 {
     public class DocumentPart
     {
-        private PackagePart part;
         private Encoding encoding;
 
         public DocumentPart(PackagePart part)
         {
-            this.part = part;
+            this.Part = part;
             encoding = Encoding.UTF8;
         }
 
@@ -44,7 +43,7 @@ namespace Microsoft.OpenXMLEditor
         {
             get
             {
-                string name = part.Uri.ToString();
+                string name = Part.Uri.ToString();
                 return System.IO.Path.GetFileName(name);
             }
         }
@@ -56,7 +55,7 @@ namespace Microsoft.OpenXMLEditor
         {
             get
             {
-                return part.Uri.ToString();
+                return Part.Uri.ToString();
             }
         }
 
@@ -67,7 +66,7 @@ namespace Microsoft.OpenXMLEditor
         {
             get
             {
-                return part.ContentType;
+                return Part.ContentType;
             }
         }
 
@@ -92,7 +91,7 @@ namespace Microsoft.OpenXMLEditor
         {
             get
             {
-                return part.CompressionOption.ToString();
+                return Part.CompressionOption.ToString();
             }
         }
 
@@ -102,22 +101,26 @@ namespace Microsoft.OpenXMLEditor
             get
             {
                 // Read the stream
-                Stream stream = part.GetStream();
-                StreamReader reader = new StreamReader(stream);
-                encoding = reader.CurrentEncoding;
-                System.Diagnostics.Debug.WriteLine(encoding.EncodingName);
-                if (reader == null)
-                    return null;
-                return reader.ReadToEnd();
+                Stream stream = Part.GetStream();
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    encoding = reader.CurrentEncoding;
+                    System.Diagnostics.Debug.WriteLine(encoding.EncodingName);
+                    if (reader == null)
+                        return null;
+                    return reader.ReadToEnd();
+                }
             }
             set
             {
                 // Write to stream
-                Stream stream = part.GetStream(System.IO.FileMode.Open, System.IO.FileAccess.ReadWrite);
+                Stream stream = Part.GetStream(FileMode.Open, FileAccess.ReadWrite);
                 stream.Seek(0, SeekOrigin.Begin);
-                StreamWriter writer = new StreamWriter(stream, encoding);
-                writer.Write(value);
-                writer.Flush();
+                using (StreamWriter writer = new StreamWriter(stream, encoding))
+                {
+                    writer.Write(value);
+                    writer.Flush();
+                }
                 stream.SetLength(stream.Position);
                 stream.Close();
             }
@@ -129,7 +132,7 @@ namespace Microsoft.OpenXMLEditor
             get
             {
                 // Read the stream
-                Stream stream = part.GetStream();
+                Stream stream = Part.GetStream();
                 Image image = Image.FromStream(stream);
                 stream.Close();
                 return image;
@@ -137,12 +140,6 @@ namespace Microsoft.OpenXMLEditor
         }
 
         [Browsable(false)]
-        public PackagePart Part
-        {
-            get
-            {
-                return part;
-            }
-        }
+        public PackagePart Part { get; }
     }
 }

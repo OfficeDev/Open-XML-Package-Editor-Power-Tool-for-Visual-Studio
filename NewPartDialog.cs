@@ -81,22 +81,24 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonBrowse_Click(object sender, EventArgs e)
+        private void ButtonBrowse_Click(object sender, EventArgs e)
         {
-            ArrayList imageTypes = new ArrayList();
-            imageTypes.Add(new string[] { "*.jpg;*.jpeg", "JPEG File Interchange Format" });
-            imageTypes.Add(new string[] { "*.gif", "Graphics Interchange Format" });
-            imageTypes.Add(new string[] { "*.png", "Portable Network Graphics" });
-            imageTypes.Add(new string[] { "*.bmp", "Windows Bitmap" });
-            imageTypes.Add(new string[] { "*.ico", "Windows Icon" });
-            imageTypes.Add(new string[] { "*.emf", "Windows Enhanced Metafile" });
-            imageTypes.Add(new string[] { "*.wmf", "Windows Metafile" });
-            imageTypes.Add(new string[] { "*.emz", "Compressed Windows Enhanced Metafile" });
-            imageTypes.Add(new string[] { "*.wmz", "Compressed Windows Metafile" });
-            imageTypes.Add(new string[] { "*.pcz", "Compressed Macintosh PICT" });
-            imageTypes.Add(new string[] { "*.tif;*.tiff", "Tag Image File Format" });
-            imageTypes.Add(new string[] { "*.xbm", "X Bitmap Graphic" });
-            imageTypes.Add(new string[] { "*.pcx", "PC Paintbrush Bitmap Graphic" });
+            ArrayList imageTypes = new ArrayList
+            {
+                new string[] { "*.jpg;*.jpeg", "JPEG File Interchange Format" },
+                new string[] { "*.gif", "Graphics Interchange Format" },
+                new string[] { "*.png", "Portable Network Graphics" },
+                new string[] { "*.bmp", "Windows Bitmap" },
+                new string[] { "*.ico", "Windows Icon" },
+                new string[] { "*.emf", "Windows Enhanced Metafile" },
+                new string[] { "*.wmf", "Windows Metafile" },
+                new string[] { "*.emz", "Compressed Windows Enhanced Metafile" },
+                new string[] { "*.wmz", "Compressed Windows Metafile" },
+                new string[] { "*.pcz", "Compressed Macintosh PICT" },
+                new string[] { "*.tif;*.tiff", "Tag Image File Format" },
+                new string[] { "*.xbm", "X Bitmap Graphic" },
+                new string[] { "*.pcx", "PC Paintbrush Bitmap Graphic" }
+            };
 
             string filter = "", allFilters = "";
             foreach (string[] imageType in imageTypes)

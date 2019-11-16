@@ -26,7 +26,7 @@ namespace Microsoft.OpenXMLEditor
 {
     class DocumentRelationship
     {
-        private PackageRelationship rel;
+        private readonly PackageRelationship rel;
 
         public DocumentRelationship(PackageRelationship rel)
         {

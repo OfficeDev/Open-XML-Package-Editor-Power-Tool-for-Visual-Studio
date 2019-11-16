@@ -583,7 +583,7 @@ namespace Microsoft.OpenXMLEditor
     // [CLSCompliant(false)]
     public static class KnownPackageInfo
     {
-        private static ContentTypeInfo[] m_rgContentTypeInfo = new ContentTypeInfo[]
+        private static readonly ContentTypeInfo[] m_rgContentTypeInfo = new ContentTypeInfo[]
         {
             // Default (this entry must be first, but the values are not used)
             new ContentTypeInfo(ContentType.UseDefault,          Comp.CN,   "",        ""                                                    ),
@@ -823,7 +823,7 @@ namespace Microsoft.OpenXMLEditor
 	        new ContentTypeInfo( ContentType.VisioExtensions,     Comp.CD,   ".xml",    "application/vnd.ms-visio.extensions+xml")
         }; // ContentTypeInfo[]
 
-        private static PartInfo[] m_rgPartInfo = new PartInfo[]
+        private static readonly PartInfo[] m_rgPartInfo = new PartInfo[]
         {
             // Media
             new PartInfo(PartType.Image,                   "media/image?",                       "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",                    ContentType.ImageStart, ContentType. ImageEnd), 

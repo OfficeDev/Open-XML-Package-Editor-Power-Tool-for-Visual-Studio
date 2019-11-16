@@ -125,7 +125,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonBrowse.Size = new System.Drawing.Size(25, 20);
             this.buttonBrowse.TabIndex = 2;
             this.buttonBrowse.UseVisualStyleBackColor = true;
-            this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
+            this.buttonBrowse.Click += new System.EventHandler(this.ButtonBrowse_Click);
             // 
             // openFileDialog
             // 

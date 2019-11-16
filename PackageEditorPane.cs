@@ -19,10 +19,8 @@ See the Apache Version 2.0 License for specific language governing permissions a
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
@@ -33,10 +31,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using System.IO;
 using System.IO.Packaging;
-using System.Text;
 
-using IServiceProvider = System.IServiceProvider;
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using VSStd97CmdID = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
 using Packaging = System.IO.Packaging;
 
@@ -65,7 +60,7 @@ namespace Microsoft.OpenXMLEditor
             public string extension;
             public string type;
         };
-        private Format[] formats = new Format[]
+        private readonly Format[] formats = new Format[]
         {
             // Office Packages
             new Format( ".crtx",    "Chart Template" ),
@@ -112,11 +107,10 @@ namespace Microsoft.OpenXMLEditor
         #region Fields
 
         private ServiceProvider vsServiceProvider;
-        private OpenXMLEditor myPackage;
 
-        // This flag is true when we are asking the QueryEditQuerySave service if we can edit the
-        // file. It is used to avoid to have more than one request queued.
-        private bool gettingCheckoutStatus;
+        ////// This flag is true when we are asking the QueryEditQuerySave service if we can edit the
+        ////// file. It is used to avoid to have more than one request queued.
+        ////private bool gettingCheckoutStatus;
 
         // Find and replace related variables
         private object findState = null;
@@ -142,7 +136,7 @@ namespace Microsoft.OpenXMLEditor
         private bool showXmlRels = false;
 
         private const int maxHistory = 10;
-        private LinkedList<DocumentPart> history = new LinkedList<DocumentPart>();
+        private readonly LinkedList<DocumentPart> history = new LinkedList<DocumentPart>();
         private LinkedListNode<DocumentPart> curHistory = null;
 
         // Track selection service of the Visual Studio
@@ -156,7 +150,7 @@ namespace Microsoft.OpenXMLEditor
 
         private PackageEditorPane()
         {
-            PrivateInit(null);
+            PrivateInit();
 
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
@@ -164,18 +158,17 @@ namespace Microsoft.OpenXMLEditor
 
         public PackageEditorPane(OpenXMLEditor package)
         {
-            PrivateInit(package);
+            PrivateInit();
 
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
+
             this.treeView.Font = VsShellUtilities.GetEnvironmentFont(package);
         }
 
-        private void PrivateInit(OpenXMLEditor package)
+        private void PrivateInit()
         {
-            myPackage = package;
-            gettingCheckoutStatus = false;
-            isFileReloading = false;
+            ////isFileReloading = false;
             fileChangeNotifyCookie = VSConstants.VSCOOKIE_NIL;
             changesToIgnore = 0;
         }
@@ -224,46 +217,41 @@ namespace Microsoft.OpenXMLEditor
         private void NotifyDocChanged()
         {
 
-                // Get a reference to the Running Document Table
-                if (runningDocTable == null)
-                {
-                    runningDocTable = (IVsRunningDocumentTable)GetVsService(typeof(SVsRunningDocumentTable));
-                }
+            // Get a reference to the Running Document Table
+            if (runningDocTable == null)
+            {
+                runningDocTable = (IVsRunningDocumentTable)GetVsService(typeof(SVsRunningDocumentTable));
+            }
 
-                // Lock the document
-                uint docCookie;
-                IVsHierarchy hierarchy;
-                uint itemID;
-                IntPtr docData = IntPtr.Zero;
-
-                int hr = runningDocTable.FindAndLockDocument(
+            // Lock the document
+            int hr = runningDocTable.FindAndLockDocument(
                     (uint)_VSRDTFLAGS.RDT_ReadLock,
                     docPkg.FilePath,
-                    out hierarchy,
-                    out itemID,
-                    out docData,
-                    out docCookie
+                    out _,
+                    out _,
+                    out IntPtr docData,
+                    out uint docCookie
                 );
 
-                    // Release the docData because we don't use it.
-                    if (IntPtr.Zero != docData)
-                    {
-                        Marshal.Release(docData);
-                    }
-                   ErrorHandler.ThrowOnFailure(hr);
+            // Release the docData because we don't use it.
+            if (IntPtr.Zero != docData)
+            {
+                Marshal.Release(docData);
+            }
+            ErrorHandler.ThrowOnFailure(hr);
 
 
 
-                // Send the notification. Note that we do not throw now in case of error because before
-                // we have to unlock the document.
-                hr = runningDocTable.NotifyDocumentChanged(docCookie, (uint)__VSRDTATTRIB.RDTA_DocDataReloaded);
+            // Send the notification. Note that we do not throw now in case of error because before
+            // we have to unlock the document.
+            hr = runningDocTable.NotifyDocumentChanged(docCookie, (uint)__VSRDTATTRIB.RDTA_DocDataReloaded);
 
-                // Unlock the document.
-                // Note that we have to unlock the document even if the previous call failed.
-                runningDocTable.UnlockDocument((uint)_VSRDTFLAGS.RDT_ReadLock, docCookie);
+            // Unlock the document.
+            // Note that we have to unlock the document even if the previous call failed.
+            runningDocTable.UnlockDocument((uint)_VSRDTFLAGS.RDT_ReadLock, docCookie);
 
-                // Check if the call to NotifyDocChanged failed.
-                ErrorHandler.ThrowOnFailure(hr);
+            // Check if the call to NotifyDocChanged failed.
+            ErrorHandler.ThrowOnFailure(hr);
 
 
         }
@@ -286,13 +274,6 @@ namespace Microsoft.OpenXMLEditor
                 ix++;
             }
             return uint.MaxValue;
-        }
-
-        string ExtFromFormatIndex(uint ix)
-        {
-            if (ix < formats.Length)
-                return formats[ix].extension;
-            return null;
         }
 
         private void AdviseFileChange(bool subscribe)
@@ -327,57 +308,55 @@ namespace Microsoft.OpenXMLEditor
             ErrorHandler.ThrowOnFailure(hr);
         }
 
-        /// <summary>
-        /// This function asks to the QueryEditQuerySave service if it is possible to
-        /// edit the file.
-        /// </summary>
-        private bool CanEditFile()
-        {
-            Debug.WriteLine("\t**** CanEditFile called ****");
+        /////// <summary>
+        /////// This function asks to the QueryEditQuerySave service if it is possible to
+        /////// edit the file.
+        /////// </summary>
+        ////private bool CanEditFile()
+        ////{
+        ////    Debug.WriteLine("\t**** CanEditFile called ****");
 
-            // Check the status of the recursion guard
-            if (gettingCheckoutStatus)
-                return false;
+        ////    // Check the status of the recursion guard
+        ////    if (gettingCheckoutStatus)
+        ////        return false;
 
-            try
-            {
-                // Set the recursion guard
-                gettingCheckoutStatus = true;
+        ////    try
+        ////    {
+        ////        // Set the recursion guard
+        ////        gettingCheckoutStatus = true;
 
-                // Get the QueryEditQuerySave service
-                IVsQueryEditQuerySave2 queryEditQuerySave = (IVsQueryEditQuerySave2)GetVsService(typeof(SVsQueryEditQuerySave));
+        ////        // Get the QueryEditQuerySave service
+        ////        IVsQueryEditQuerySave2 queryEditQuerySave = (IVsQueryEditQuerySave2)GetVsService(typeof(SVsQueryEditQuerySave));
 
-                // Now call the QueryEdit method to find the edit status of this file
-                string[] documents = { this.docPkg.FilePath };
-                uint result;
-                uint outFlags;
+        ////        // Now call the QueryEdit method to find the edit status of this file
+        ////        string[] documents = { this.docPkg.FilePath };
 
-                // Note that this function can popup a dialog to ask the user to checkout the file.
-                // When this dialog is visible, it is possible to receive other request to change
-                // the file and this is the reason for the recursion guard.
-                int hr = queryEditQuerySave.QueryEditFiles(
-                    0,              // Flags
-                    1,              // Number of elements in the array
-                    documents,      // Files to edit
-                    null,           // Input flags
-                    null,           // Input array of VSQEQS_FILE_ATTRIBUTE_DATA
-                    out result,     // result of the checkout
-                    out outFlags    // Additional flags
-                );
-                if (ErrorHandler.Succeeded(hr) && (result == (uint)tagVSQueryEditResult.QER_EditOK))
-                {
-                    // In this case (and only in this case) we can return true from this function.
-                    return true;
-                }
-            }
-            finally
-            {
-                gettingCheckoutStatus = false;
-            }
-            return false;
-        }
+        ////        // Note that this function can popup a dialog to ask the user to checkout the file.
+        ////        // When this dialog is visible, it is possible to receive other request to change
+        ////        // the file and this is the reason for the recursion guard.
+        ////        int hr = queryEditQuerySave.QueryEditFiles(
+        ////            0,              // Flags
+        ////            1,              // Number of elements in the array
+        ////            documents,      // Files to edit
+        ////            null,           // Input flags
+        ////            null,           // Input array of VSQEQS_FILE_ATTRIBUTE_DATA
+        ////            out uint result,     // result of the checkout
+        ////            out uint outFlags    // Additional flags
+        ////        );
+        ////        if (ErrorHandler.Succeeded(hr) && (result == (uint)tagVSQueryEditResult.QER_EditOK))
+        ////        {
+        ////            // In this case (and only in this case) we can return true from this function.
+        ////            return true;
+        ////        }
+        ////    }
+        ////    finally
+        ////    {
+        ////        gettingCheckoutStatus = false;
+        ////    }
+        ////    return false;
+        ////}
 
-        private void reloadTimer_Tick(object sender, System.EventArgs e)
+        private void ReloadTimer_Tick(object sender, System.EventArgs e)
         {
             // Here we want to check if we can process the reload.
             // We don't want to show the reload popup when the shell is not the active window,
@@ -416,7 +395,7 @@ namespace Microsoft.OpenXMLEditor
                         // If this fail, this is not fatal, but we should try to understand what went wrong.
                         Debug.Assert(hr >= 0, "Failed to close IVsWindowFrame while disposing of the package");
                     }
-                }                
+                }
                 catch (Exception ex)
                 {
                     System.Windows.Forms.MessageBox.Show(ex.Message);
@@ -787,11 +766,11 @@ namespace Microsoft.OpenXMLEditor
                 }
                 else
                 {
-                        IVsWindowFrame frame = (IVsWindowFrame)GetVsService(typeof(SVsWindowFrame));
-                        if (frame != null)
-                        {
-                            frame.CloseFrame((uint)__FRAMECLOSE.FRAMECLOSE_SaveIfDirty);
-                        }
+                    IVsWindowFrame frame = (IVsWindowFrame)GetVsService(typeof(SVsWindowFrame));
+                    if (frame != null)
+                    {
+                        frame.CloseFrame((uint)__FRAMECLOSE.FRAMECLOSE_SaveIfDirty);
+                    }
                 }
             }
             finally
@@ -859,12 +838,11 @@ namespace Microsoft.OpenXMLEditor
                         IVsQueryEditQuerySave2 queryEditQuerySave = (IVsQueryEditQuerySave2)GetVsService(typeof(SVsQueryEditQuerySave));
 
                         // Call QueryEditQuerySave
-                        uint result = 0;
                         hr = queryEditQuerySave.QuerySaveFile(
                                             docPkg.FilePath,        // filename
                                             0,    // flags
                                             null,            // file attributes
-                                            out result);    // result
+                                            out uint result);    // result
                         if (ErrorHandler.Failed(hr))
                             return hr;
 
@@ -934,7 +912,7 @@ namespace Microsoft.OpenXMLEditor
 
         int IVsPersistDocData.LoadDocData(string pszMkDocument)
         {
-                return ((IPersistFileFormat)this).Load(pszMkDocument, 0, 0);                
+            return ((IPersistFileFormat)this).Load(pszMkDocument, 0, 0);
         }
 
         int IVsPersistDocData.SetUntitledDocPath(string pszDocDataPath)
@@ -1512,7 +1490,7 @@ namespace Microsoft.OpenXMLEditor
             }
 
             return result;
-            
+
         }
 
         public void RefreshTree()
@@ -1668,20 +1646,13 @@ namespace Microsoft.OpenXMLEditor
             }
 
             IntPtr docDataExisting = Marshal.GetIUnknownForObject(this);
-            IVsWindowFrame windowFrame;
-
-            IVsHierarchy hierarchy;
-            uint itemIdFindAndLock;
-            IntPtr docDataFindAndLock;
-            uint docCookieFindAndLock;
-
             int hr = runningDocTable.FindAndLockDocument(
                 (uint)_VSRDTFLAGS.RDT_NoLock,
                 docPkg.FilePath,
-                out hierarchy,
-                out itemIdFindAndLock,
-                out docDataFindAndLock,
-                out docCookieFindAndLock
+                out IVsHierarchy hierarchy,
+                out uint itemIdFindAndLock,
+                out _,
+                out _
             );
             if (hr != VSConstants.S_OK)
             {
@@ -1698,7 +1669,7 @@ namespace Microsoft.OpenXMLEditor
                 physicalView,
                 ref logicalViewGuid,
                 docDataExisting,
-                out windowFrame);
+                out IVsWindowFrame windowFrame);
             if (hr != VSConstants.S_OK)
             {
                 Debug.Assert(false, "Couldn't open the part!");
@@ -1725,6 +1696,7 @@ namespace Microsoft.OpenXMLEditor
         public string GetXml(string physicalView)
         {
             DocumentPart part = docPkg.DocParts[physicalView];
+
             return part.Text;
         }
 
@@ -1751,15 +1723,12 @@ namespace Microsoft.OpenXMLEditor
         {
             IVsUIShell uiShell = GetVsService(typeof(SVsUIShell)) as IVsUIShell;
 
-            IEnumWindowFrames windowFramesEnum;
-            ErrorHandler.ThrowOnFailure(uiShell.GetDocumentWindowEnum(out windowFramesEnum));
+            ErrorHandler.ThrowOnFailure(uiShell.GetDocumentWindowEnum(out IEnumWindowFrames windowFramesEnum));
             IVsWindowFrame[] windowFrames = new IVsWindowFrame[1];
-            uint fetched;
-            while (windowFramesEnum.Next(1, windowFrames, out fetched) == VSConstants.S_OK && fetched == 1)
+            while (windowFramesEnum.Next(1, windowFrames, out uint fetched) == VSConstants.S_OK && fetched == 1)
             {
                 IVsWindowFrame windowFrame = windowFrames[0];
-                object data;
-                if (ErrorHandler.Succeeded(windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_ViewHelper, out data)) &&
+                if (ErrorHandler.Succeeded(windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_ViewHelper, out object data)) &&
                     data is PartViewHelper)
                 {
                     // one of our windows
@@ -1779,15 +1748,12 @@ namespace Microsoft.OpenXMLEditor
         {
             IVsUIShell uiShell = GetVsService(typeof(SVsUIShell)) as IVsUIShell;
 
-            IEnumWindowFrames windowFramesEnum;
-            ErrorHandler.ThrowOnFailure(uiShell.GetDocumentWindowEnum(out windowFramesEnum));
+            ErrorHandler.ThrowOnFailure(uiShell.GetDocumentWindowEnum(out IEnumWindowFrames windowFramesEnum));
             IVsWindowFrame[] windowFrames = new IVsWindowFrame[1];
-            uint fetched;
-            while (windowFramesEnum.Next(1, windowFrames, out fetched) == VSConstants.S_OK && fetched == 1)
+            while (windowFramesEnum.Next(1, windowFrames, out uint fetched) == VSConstants.S_OK && fetched == 1)
             {
                 IVsWindowFrame windowFrame = windowFrames[0];
-                object data;
-                if (ErrorHandler.Succeeded(windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_ViewHelper, out data)) &&
+                if (ErrorHandler.Succeeded(windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_ViewHelper, out object data)) &&
                     data is PartViewHelper)
                 {
                     // one of our windows
@@ -1806,15 +1772,12 @@ namespace Microsoft.OpenXMLEditor
         {
             IVsUIShell uiShell = GetVsService(typeof(SVsUIShell)) as IVsUIShell;
 
-            IEnumWindowFrames windowFramesEnum;
-            ErrorHandler.ThrowOnFailure(uiShell.GetDocumentWindowEnum(out windowFramesEnum));
+            ErrorHandler.ThrowOnFailure(uiShell.GetDocumentWindowEnum(out IEnumWindowFrames windowFramesEnum));
             IVsWindowFrame[] windowFrames = new IVsWindowFrame[1];
-            uint fetched;
-            while (windowFramesEnum.Next(1, windowFrames, out fetched) == VSConstants.S_OK && fetched == 1)
+            while (windowFramesEnum.Next(1, windowFrames, out uint fetched) == VSConstants.S_OK && fetched == 1)
             {
                 IVsWindowFrame windowFrame = windowFrames[0];
-                object data;
-                if (ErrorHandler.Succeeded(windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_ViewHelper, out data)) &&
+                if (ErrorHandler.Succeeded(windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_ViewHelper, out object data)) &&
                     data is PartViewHelper)
                 {
                     // one of our windows
@@ -1832,15 +1795,13 @@ namespace Microsoft.OpenXMLEditor
 
         #region UI Event Handlers
 
-        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+        private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             ArrayList properties = new ArrayList();
 
-            if (e.Node.Tag is DocumentPart)
+            // get the part
+            if (e.Node.Tag is DocumentPart docPart)
             {
-                // get the part
-                DocumentPart docPart = (DocumentPart)e.Node.Tag;
-
                 properties.Add(docPart);
 
                 if (curHistory == null)
@@ -1945,9 +1906,11 @@ namespace Microsoft.OpenXMLEditor
             }
 
             // update the Properties Window
-            selContainer = new SelectionContainer(false, false);
-            selContainer.SelectableObjects = properties;
-            selContainer.SelectedObjects = properties;
+            selContainer = new SelectionContainer(false, false)
+            {
+                SelectableObjects = properties,
+                SelectedObjects = properties
+            };
 
             ITrackSelection track = TrackSelection;
             if (track != null)
@@ -1956,9 +1919,8 @@ namespace Microsoft.OpenXMLEditor
 
         private bool OpenTreeViewNode(TreeNode curNode, bool toggle)
         {
-            if (curNode.Tag is PackageRelationship)
+            if (curNode.Tag is PackageRelationship rel)
             {
-                PackageRelationship rel = (PackageRelationship)curNode.Tag;
                 if (rel.TargetMode == TargetMode.Internal)
                 {
                     Uri target = System.IO.Packaging.PackUriHelper.ResolvePartUri(rel.SourceUri, rel.TargetUri);
@@ -1990,9 +1952,8 @@ namespace Microsoft.OpenXMLEditor
                 }
                 return true;
             }
-            else if (curNode.Tag is DocumentPart)
+            else if (curNode.Tag is DocumentPart part)
             {
-                DocumentPart part = (DocumentPart)curNode.Tag;
                 OpenPartEditor(part);
                 return true;
             }
@@ -2005,12 +1966,12 @@ namespace Microsoft.OpenXMLEditor
             return false;
         }
 
-        private void treeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void TreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             OpenTreeViewNode(e.Node, false);
         }
 
-        void treeView_KeyDown(object sender, KeyEventArgs e)
+        void TreeView_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -2025,7 +1986,7 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonBack_Click(object sender, EventArgs e)
+        private void ButtonBack_Click(object sender, EventArgs e)
         {
             if (curHistory == null || history.First == curHistory)
             {
@@ -2052,7 +2013,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonHistory.Enabled = true;
         }
 
-        private void buttonForward_Click(object sender, EventArgs e)
+        private void ButtonForward_Click(object sender, EventArgs e)
         {
             if (curHistory == null || history.Last == curHistory)
             {
@@ -2079,7 +2040,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonHistory.Enabled = true;
         }
 
-        void buttonHistory_DropDownOpening(object sender, System.EventArgs e)
+        void ButtonHistory_DropDownOpening(object sender, System.EventArgs e)
         {
             buttonHistory.DropDownItems.Clear();
             LinkedListNode<DocumentPart> node = history.First;
@@ -2093,7 +2054,7 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        void buttonHistory_DropDownItemClicked(object sender, System.Windows.Forms.ToolStripItemClickedEventArgs e)
+        void ButtonHistory_DropDownItemClicked(object sender, System.Windows.Forms.ToolStripItemClickedEventArgs e)
         {
             // reposition the history
             curHistory = (LinkedListNode<DocumentPart>)e.ClickedItem.Tag;
@@ -2114,18 +2075,20 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonNewFolder_Click(object sender, EventArgs e)
+        private void ButtonNewFolder_Click(object sender, EventArgs e)
         {
-            NewFolderDialog dialog = new NewFolderDialog();
-            if (dialog.ShowDialog(this) == DialogResult.OK)
+            using (NewFolderDialog dialog = new NewFolderDialog())
             {
-                string path;
-                if (curHistory == null || curHistory.Value == null)
-                    path = "/" + dialog.FolderName;
-                else
-                    path = curHistory.Value.Path + "/" + dialog.FolderName;
-                TreeNode newNode = treeView.SelectedNode.Nodes.Add(path, dialog.FolderName);
-                treeView.SelectedNode = newNode;
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    string path;
+                    if (curHistory == null || curHistory.Value == null)
+                        path = "/" + dialog.FolderName;
+                    else
+                        path = curHistory.Value.Path + "/" + dialog.FolderName;
+                    TreeNode newNode = treeView.SelectedNode.Nodes.Add(path, dialog.FolderName);
+                    treeView.SelectedNode = newNode;
+                }
             }
         }
 
@@ -2135,309 +2098,313 @@ namespace Microsoft.OpenXMLEditor
                 treeView.SelectedNode.Tag == null || treeView.SelectedNode.Tag is DocumentPackage,
                 "Current node must be a folder node or document node");
 
-            NewPartDialog dialog = new NewPartDialog(disableImport);
-            if (dialog.ShowDialog(this) != DialogResult.OK)
-                return;
-
-            try
+            using (NewPartDialog dialog = new NewPartDialog(disableImport))
             {
-                // build the path for the new part
-                string path = treeView.SelectedNode.FullPath; // will include root file name
-                int ix = path.IndexOf('/');
-                if (ix > 0)
-                    path = path.Substring(ix) + "/" + dialog.PartName;
-                else
-                    path = "/" + dialog.PartName;
-                Uri fileUri = new Uri(path, UriKind.RelativeOrAbsolute);
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                    return;
 
-                // create the part
-                PackagePart part = docPkg.Package.CreatePart(fileUri, dialog.ContentType, dialog.Compress);
-
-                // load the new part's stream
-                if (dialog.ImportFile.Length > 0)
+                try
                 {
-                    Stream fileStream = new FileStream(dialog.ImportFile, FileMode.Open, FileAccess.Read);
-                    byte[] fileBytes = new byte[fileStream.Length];
-                    fileStream.Read(fileBytes, 0, fileBytes.Length);
-                    fileStream.Close();
+                    // build the path for the new part
+                    string path = treeView.SelectedNode.FullPath; // will include root file name
+                    int ix = path.IndexOf('/');
+                    if (ix > 0)
+                        path = path.Substring(ix) + "/" + dialog.PartName;
+                    else
+                        path = "/" + dialog.PartName;
+                    Uri fileUri = new Uri(path, UriKind.RelativeOrAbsolute);
 
-                    Stream partStream = part.GetStream();
-                    partStream.Write(fileBytes, 0, fileBytes.Length);
-                    partStream.Close();
-                }
+                    // create the part
+                    PackagePart part = docPkg.Package.CreatePart(fileUri, dialog.ContentType, dialog.Compress);
 
-                // TODO: workaround for a WinFX problem.  Retest with later versions
-
-                // referesh the package and tree
-                part = null;
-                curHistory = null;
-                history.Clear();
-                treeView.Nodes.Clear();
-                docPkg.ReloadFromMemory();
-                RefreshTree();
-
-                // select the newly added tree node
-                DocumentPart docPart = docPkg.DocParts[path];
-                Debug.Assert(docPart != null);
-                if (docPart != null)
-                {
-                    TreeNode[] nodes = treeView.Nodes.Find(docPart.Path, true);
-                    Debug.Assert(nodes.Length == 1);
-                    if (nodes.Length > 0)
+                    // load the new part's stream
+                    if (dialog.ImportFile.Length > 0)
                     {
-                        TreeNode node = nodes[0];
-                        treeView.SelectedNode = node;
+                        Stream fileStream = new FileStream(dialog.ImportFile, FileMode.Open, FileAccess.Read);
+                        byte[] fileBytes = new byte[fileStream.Length];
+                        fileStream.Read(fileBytes, 0, fileBytes.Length);
+                        fileStream.Close();
+
+                        Stream partStream = part.GetStream();
+                        partStream.Write(fileBytes, 0, fileBytes.Length);
+                        partStream.Close();
                     }
+
+                    // TODO: workaround for a WinFX problem.  Retest with later versions
+
+                    // referesh the package and tree
+                    part = null;
+                    curHistory = null;
+                    history.Clear();
+                    treeView.Nodes.Clear();
+                    docPkg.ReloadFromMemory();
+                    RefreshTree();
+
+                    // select the newly added tree node
+                    DocumentPart docPart = docPkg.DocParts[path];
+                    Debug.Assert(docPart != null);
+                    if (docPart != null)
+                    {
+                        TreeNode[] nodes = treeView.Nodes.Find(docPart.Path, true);
+                        Debug.Assert(nodes.Length == 1);
+                        if (nodes.Length > 0)
+                        {
+                            TreeNode node = nodes[0];
+                            treeView.SelectedNode = node;
+                        }
+                    }
+
+                    /* should work, but can corrupt the [Content_Types].xml part
+                     * 
+                    DocumentPart docPart = new DocumentPart(part);
+                    docPkg.DocParts.Add(docPart.Path, docPart);
+
+                    // add the leaf
+                    TreeNode partNode;
+                    string ext = System.IO.Path.GetExtension(docPart.Name);
+                    if (OfficePackageInfo.IsXml(ext))
+                        partNode = treeView.SelectedNode.Nodes.Add(docPart.Path, docPart.Name, "xml", "xml");
+                    else if (OfficePackageInfo.IsImage(ext))
+                        partNode = treeView.SelectedNode.Nodes.Add(docPart.Path, docPart.Name, "img", "img");
+                    else
+                        partNode = treeView.SelectedNode.Nodes.Add(docPart.Path, docPart.Name, "file", "file");
+                    partNode.Tag = docPart;
+
+                    partNode.EnsureVisible();
+                    treeView.SelectedNode = partNode;
+                    */
+
+                    docPkg.IsDirty = true;
                 }
-
-                /* should work, but can corrupt the [Content_Types].xml part
-                 * 
-                DocumentPart docPart = new DocumentPart(part);
-                docPkg.DocParts.Add(docPart.Path, docPart);
-
-                // add the leaf
-                TreeNode partNode;
-                string ext = System.IO.Path.GetExtension(docPart.Name);
-                if (OfficePackageInfo.IsXml(ext))
-                    partNode = treeView.SelectedNode.Nodes.Add(docPart.Path, docPart.Name, "xml", "xml");
-                else if (OfficePackageInfo.IsImage(ext))
-                    partNode = treeView.SelectedNode.Nodes.Add(docPart.Path, docPart.Name, "img", "img");
-                else
-                    partNode = treeView.SelectedNode.Nodes.Add(docPart.Path, docPart.Name, "file", "file");
-                partNode.Tag = docPart;
-
-                partNode.EnsureVisible();
-                treeView.SelectedNode = partNode;
-                */
-
-                docPkg.IsDirty = true;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(
-                    this,
-                    "Error adding the new part:\r\n" + e.Message,
-                    AboutForm.AssemblyTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                catch (Exception e)
+                {
+                    MessageBox.Show(
+                        this,
+                        "Error adding the new part:\r\n" + e.Message,
+                        AboutForm.AssemblyTitle,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
             }
         }
 
-        private void buttonAddXmlPart_Click(object sender, EventArgs e)
+        private void ButtonAddXmlPart_Click(object sender, EventArgs e)
         {
             AddPart(true);
         }
 
-        private void buttonAddImagePart_Click(object sender, EventArgs e)
+        private void ButtonAddImagePart_Click(object sender, EventArgs e)
         {
             AddPart(false);
         }
 
-        private void buttonAddInternalRel_Click(object sender, EventArgs e)
+        private void ButtonAddInternalRel_Click(object sender, EventArgs e)
         {
             Debug.Assert(
                 treeView.SelectedNode.Tag is DocumentPart || treeView.SelectedNode.Tag is DocumentPackage,
                 "Current node must be a part or document node");
 
-            NewInternalRelationshipDialog dialog = new NewInternalRelationshipDialog(this);
-            if (dialog.ShowDialog(this) != DialogResult.OK)
-                return;
-
-            try
+            using (NewInternalRelationshipDialog dialog = new NewInternalRelationshipDialog(this))
             {
-                PackageRelationship rel;
-                if (treeView.SelectedNode.Tag is DocumentPart)
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                    return;
+
+                try
                 {
-                    DocumentPart docPart = treeView.SelectedNode.Tag as DocumentPart;
-
-                    Uri targetUri;
-                    if (dialog.TargetKind == UriKind.Relative)
-                        targetUri = System.IO.Packaging.PackUriHelper.GetRelativeUri(docPart.Part.Uri, dialog.Target.Part.Uri);
-                    else
-                        targetUri = dialog.Target.Part.Uri;
-
-                    if (dialog.Id.Length > 0)
-                        rel = docPart.Part.CreateRelationship(targetUri, TargetMode.Internal, dialog.RelType, dialog.Id);
-                    else
-                        rel = docPart.Part.CreateRelationship(targetUri, TargetMode.Internal, dialog.RelType); // auto id
-                }
-                else if (treeView.SelectedNode.Tag is DocumentPackage)
-                {
-                    DocumentPackage doc = treeView.SelectedNode.Tag as DocumentPackage;
-
-                    Uri targetUri;
-                    if (dialog.TargetKind == UriKind.Relative)
-                        targetUri = new Uri(dialog.Target.Path.TrimStart('/'), UriKind.Relative);
-                    else
-                        targetUri = dialog.Target.Part.Uri;
-
-                    if (dialog.Id.Length > 0)
-                        rel = doc.Package.CreateRelationship(targetUri, TargetMode.Internal, dialog.RelType, dialog.Id);
-                    else
-                        rel = doc.Package.CreateRelationship(targetUri, TargetMode.Internal, dialog.RelType); // auto id
-                }
-                else
-                    throw new Exception("You may only add relationships to the document root or to a part.");
-
-                // TODO: workaround for a WinFX problem.  Retest with later versions
-
-                // remember the currently selelcted node.
-                string path = treeView.SelectedNode.FullPath; // will include root file name
-                int ix = path.IndexOf('/');
-                if (ix > 0)
-                    path = path.Substring(ix);
-                else
-                    path = null;
-
-                // referesh the package and tree
-                rel = null;
-                curHistory = null;
-                history.Clear();
-                treeView.Nodes.Clear();
-                docPkg.ReloadFromMemory();
-                RefreshTree();
-
-                // reselect the previously selected tree node
-                if (path != null)
-                {
-                    DocumentPart docPart = docPkg.DocParts[path];
-                    Debug.Assert(docPart != null);
-                    if (docPart != null)
+                    PackageRelationship rel;
+                    if (treeView.SelectedNode.Tag is DocumentPart)
                     {
-                        TreeNode[] nodes = treeView.Nodes.Find(docPart.Path, true);
-                        Debug.Assert(nodes.Length == 1);
-                        if (nodes.Length > 0)
+                        DocumentPart docPart = treeView.SelectedNode.Tag as DocumentPart;
+
+                        Uri targetUri;
+                        if (dialog.TargetKind == UriKind.Relative)
+                            targetUri = System.IO.Packaging.PackUriHelper.GetRelativeUri(docPart.Part.Uri, dialog.Target.Part.Uri);
+                        else
+                            targetUri = dialog.Target.Part.Uri;
+
+                        if (dialog.Id.Length > 0)
+                            rel = docPart.Part.CreateRelationship(targetUri, TargetMode.Internal, dialog.RelType, dialog.Id);
+                        else
+                            rel = docPart.Part.CreateRelationship(targetUri, TargetMode.Internal, dialog.RelType); // auto id
+                    }
+                    else if (treeView.SelectedNode.Tag is DocumentPackage)
+                    {
+                        DocumentPackage doc = treeView.SelectedNode.Tag as DocumentPackage;
+
+                        Uri targetUri;
+                        if (dialog.TargetKind == UriKind.Relative)
+                            targetUri = new Uri(dialog.Target.Path.TrimStart('/'), UriKind.Relative);
+                        else
+                            targetUri = dialog.Target.Part.Uri;
+
+                        if (dialog.Id.Length > 0)
+                            rel = doc.Package.CreateRelationship(targetUri, TargetMode.Internal, dialog.RelType, dialog.Id);
+                        else
+                            rel = doc.Package.CreateRelationship(targetUri, TargetMode.Internal, dialog.RelType); // auto id
+                    }
+                    else
+                        throw new Exception("You may only add relationships to the document root or to a part.");
+
+                    // TODO: workaround for a WinFX problem.  Retest with later versions
+
+                    // remember the currently selelcted node.
+                    string path = treeView.SelectedNode.FullPath; // will include root file name
+                    int ix = path.IndexOf('/');
+                    if (ix > 0)
+                        path = path.Substring(ix);
+                    else
+                        path = null;
+
+                    // referesh the package and tree
+                    rel = null;
+                    curHistory = null;
+                    history.Clear();
+                    treeView.Nodes.Clear();
+                    docPkg.ReloadFromMemory();
+                    RefreshTree();
+
+                    // reselect the previously selected tree node
+                    if (path != null)
+                    {
+                        DocumentPart docPart = docPkg.DocParts[path];
+                        Debug.Assert(docPart != null);
+                        if (docPart != null)
                         {
-                            TreeNode node = nodes[0];
-                            treeView.SelectedNode = node;
-                            node.Expand();
+                            TreeNode[] nodes = treeView.Nodes.Find(docPart.Path, true);
+                            Debug.Assert(nodes.Length == 1);
+                            if (nodes.Length > 0)
+                            {
+                                TreeNode node = nodes[0];
+                                treeView.SelectedNode = node;
+                                node.Expand();
+                            }
                         }
                     }
+
+                    /* should work, but leaves .rels corrupted
+                    TreeNode relNode;
+                    relNode = treeView.SelectedNode.Nodes.Add(null, rel.TargetUri.ToString(), "rel", "rel");
+                    relNode.Tag = rel;
+
+                    relNode.EnsureVisible();
+                    treeView.SelectedNode = relNode;
+                    */
+
+                    docPkg.IsDirty = true;
                 }
-
-                /* should work, but leaves .rels corrupted
-                TreeNode relNode;
-                relNode = treeView.SelectedNode.Nodes.Add(null, rel.TargetUri.ToString(), "rel", "rel");
-                relNode.Tag = rel;
-
-                relNode.EnsureVisible();
-                treeView.SelectedNode = relNode;
-                */
-
-                docPkg.IsDirty = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    this,
-                    "Error adding the new relationship:\r\n" + ex.Message,
-                    AboutForm.AssemblyTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        this,
+                        "Error adding the new relationship:\r\n" + ex.Message,
+                        AboutForm.AssemblyTitle,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
             }
         }
 
-        private void buttonAddExternalRel_Click(object sender, EventArgs e)
+        private void ButtonAddExternalRel_Click(object sender, EventArgs e)
         {
             Debug.Assert(
                 treeView.SelectedNode.Tag is DocumentPart || treeView.SelectedNode.Tag is DocumentPackage,
                 "Current node must be a part or document node");
 
-            NewExternalRelationshipDialog dialog = new NewExternalRelationshipDialog(this);
-            if (dialog.ShowDialog(this) != DialogResult.OK)
-                return;
-
-            try
+            using (NewExternalRelationshipDialog dialog = new NewExternalRelationshipDialog())
             {
-                Uri target = new Uri(dialog.Target, UriKind.RelativeOrAbsolute);
-                PackageRelationship rel;
-                if (treeView.SelectedNode.Tag is DocumentPart)
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                    return;
+
+                try
                 {
-                    DocumentPart docPart = treeView.SelectedNode.Tag as DocumentPart;
-                    if (dialog.Id.Length > 0)
-                        rel = docPart.Part.CreateRelationship(target, TargetMode.External, dialog.RelType, dialog.Id);
-                    else
-                        rel = docPart.Part.CreateRelationship(target, TargetMode.External, dialog.RelType); // auto id
-                }
-                else if (treeView.SelectedNode.Tag is DocumentPackage)
-                {
-                    DocumentPackage doc = treeView.SelectedNode.Tag as DocumentPackage;
-                    if (dialog.Id.Length > 0)
-                        rel = doc.Package.CreateRelationship(target, TargetMode.External, dialog.RelType, dialog.Id);
-                    else
-                        rel = doc.Package.CreateRelationship(target, TargetMode.External, dialog.RelType); // auto id
-                }
-                else
-                    throw new Exception("You may only add relationships to the document root or to a part.");
-
-                // TODO: workaround for a WinFX problem.  Retest with later versions
-
-                // remember the currently selelcted node.
-                string path = treeView.SelectedNode.FullPath; // will include root file name
-                int ix = path.IndexOf('/');
-                if (ix > 0)
-                    path = path.Substring(ix);
-                else
-                    path = null;
-
-                // referesh the package and tree
-                rel = null;
-                curHistory = null;
-                history.Clear();
-                treeView.Nodes.Clear();
-                docPkg.ReloadFromMemory();
-                RefreshTree();
-
-                // reselect the previously selected tree node
-                if (path != null)
-                {
-                    DocumentPart docPart = docPkg.DocParts[path];
-                    Debug.Assert(docPart != null);
-                    if (docPart != null)
+                    Uri target = new Uri(dialog.Target, UriKind.RelativeOrAbsolute);
+                    PackageRelationship rel;
+                    if (treeView.SelectedNode.Tag is DocumentPart)
                     {
-                        TreeNode[] nodes = treeView.Nodes.Find(docPart.Path, true);
-                        Debug.Assert(nodes.Length == 1);
-                        if (nodes.Length > 0)
+                        DocumentPart docPart = treeView.SelectedNode.Tag as DocumentPart;
+                        if (dialog.Id.Length > 0)
+                            rel = docPart.Part.CreateRelationship(target, TargetMode.External, dialog.RelType, dialog.Id);
+                        else
+                            rel = docPart.Part.CreateRelationship(target, TargetMode.External, dialog.RelType); // auto id
+                    }
+                    else if (treeView.SelectedNode.Tag is DocumentPackage)
+                    {
+                        DocumentPackage doc = treeView.SelectedNode.Tag as DocumentPackage;
+                        if (dialog.Id.Length > 0)
+                            rel = doc.Package.CreateRelationship(target, TargetMode.External, dialog.RelType, dialog.Id);
+                        else
+                            rel = doc.Package.CreateRelationship(target, TargetMode.External, dialog.RelType); // auto id
+                    }
+                    else
+                        throw new Exception("You may only add relationships to the document root or to a part.");
+
+                    // TODO: workaround for a WinFX problem.  Retest with later versions
+
+                    // remember the currently selelcted node.
+                    string path = treeView.SelectedNode.FullPath; // will include root file name
+                    int ix = path.IndexOf('/');
+                    if (ix > 0)
+                        path = path.Substring(ix);
+                    else
+                        path = null;
+
+                    // referesh the package and tree
+                    rel = null;
+                    curHistory = null;
+                    history.Clear();
+                    treeView.Nodes.Clear();
+                    docPkg.ReloadFromMemory();
+                    RefreshTree();
+
+                    // reselect the previously selected tree node
+                    if (path != null)
+                    {
+                        DocumentPart docPart = docPkg.DocParts[path];
+                        Debug.Assert(docPart != null);
+                        if (docPart != null)
                         {
-                            TreeNode node = nodes[0];
-                            treeView.SelectedNode = node;
-                            node.Expand();
+                            TreeNode[] nodes = treeView.Nodes.Find(docPart.Path, true);
+                            Debug.Assert(nodes.Length == 1);
+                            if (nodes.Length > 0)
+                            {
+                                TreeNode node = nodes[0];
+                                treeView.SelectedNode = node;
+                                node.Expand();
+                            }
                         }
                     }
+
+                    /* should work, but leaves .rels corrupted
+                    TreeNode relNode;
+                    relNode = treeView.SelectedNode.Nodes.Add(null, rel.TargetUri.ToString(), "external_rel", "external_rel");
+                    relNode.Tag = rel;
+
+                    relNode.EnsureVisible();
+                    treeView.SelectedNode = relNode;
+                    */
+
+                    docPkg.IsDirty = true;
                 }
-
-                /* should work, but leaves .rels corrupted
-                TreeNode relNode;
-                relNode = treeView.SelectedNode.Nodes.Add(null, rel.TargetUri.ToString(), "external_rel", "external_rel");
-                relNode.Tag = rel;
-
-                relNode.EnsureVisible();
-                treeView.SelectedNode = relNode;
-                */
-
-                docPkg.IsDirty = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    this,
-                    "Error adding the new relationship:\r\n" + ex.Message,
-                    AboutForm.AssemblyTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        this,
+                        "Error adding the new relationship:\r\n" + ex.Message,
+                        AboutForm.AssemblyTitle,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
             }
         }
 
-        private void buttonProps_Click(object sender, EventArgs e)
+        private void ButtonProps_Click(object sender, EventArgs e)
         {
             IVsUIShell vsUIService = (IVsUIShell)GetVsService(typeof(IVsUIShell));
 
             if (vsUIService != null)
             {
-                IVsWindowFrame toolFrame = null;
                 Guid propertyBrowserGuid = System.ComponentModel.Design.StandardToolWindows.PropertyBrowser;
-                int hr = vsUIService.FindToolWindow(0, ref propertyBrowserGuid,
-                    out toolFrame);
+                _ = vsUIService.FindToolWindow(0, ref propertyBrowserGuid, out IVsWindowFrame toolFrame);
 
                 if (toolFrame != null)
                 {
@@ -2454,7 +2421,7 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonImport_Click(object sender, EventArgs e)
+        private void ButtonImport_Click(object sender, EventArgs e)
         {
             TreeNode node = this.treeView.SelectedNode;
             if (node == null || !(node.Tag is DocumentPart))
@@ -2534,12 +2501,12 @@ namespace Microsoft.OpenXMLEditor
             return null;
         }
 
-        private void buttonExport_Click(object sender, EventArgs e)
+        private void ButtonExport_Click(object sender, EventArgs e)
         {
             ExportPart();
         }
 
-        private void buttonEditPart_Click(object sender, EventArgs e)
+        private void ButtonEditPart_Click(object sender, EventArgs e)
         {
             TreeNode node = this.treeView.SelectedNode;
             OpenTreeViewNode(node, false);
@@ -2669,12 +2636,12 @@ namespace Microsoft.OpenXMLEditor
             docPkg.IsDirty = true;
         }
 
-        private void buttonDeletePart_Click(object sender, EventArgs e)
+        private void ButtonDeletePart_Click(object sender, EventArgs e)
         {
             DeleteNode();
         }
 
-        private void buttonShowRels_Click(object sender, EventArgs e)
+        private void ButtonShowRels_Click(object sender, EventArgs e)
         {
             showXmlRels = !showXmlRels;
             buttonShowRels.Checked = showXmlRels;
@@ -2683,10 +2650,12 @@ namespace Microsoft.OpenXMLEditor
             RefreshTree();
         }
 
-        private void buttonAbout_Click(object sender, EventArgs e)
+        private void ButtonAbout_Click(object sender, EventArgs e)
         {
-            AboutForm dlg = new AboutForm();
-            dlg.ShowDialog(this);
+            using (AboutForm dlg = new AboutForm())
+            {
+                dlg.ShowDialog(this);
+            }
         }
 
         #endregion
@@ -2698,7 +2667,7 @@ namespace Microsoft.OpenXMLEditor
             static public extern int GetActiveWindow();
         }
 
-        private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void TreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {

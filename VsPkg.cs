@@ -214,15 +214,14 @@ namespace Microsoft.OpenXMLEditor
         /// <returns>String loaded for the specified resource</returns>
         public string GetResourceString(string resourceName)
         {
-            string resourceValue;
             IVsResourceManager resourceManager = (IVsResourceManager)GetService(typeof(SVsResourceManager));
             if (resourceManager == null)
             {
                 throw new InvalidOperationException("Could not get SVsResourceManager service. Make sure the package is Sited before calling this method");
             }
             Guid packageGuid = this.GetType().GUID;
-            int hr = resourceManager.LoadResourceString(ref packageGuid, -1, resourceName, out resourceValue);
-            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(hr);
+            int hr = resourceManager.LoadResourceString(ref packageGuid, -1, resourceName, out string resourceValue);
+            ErrorHandler.ThrowOnFailure(hr);
             return resourceValue;
         }
     }

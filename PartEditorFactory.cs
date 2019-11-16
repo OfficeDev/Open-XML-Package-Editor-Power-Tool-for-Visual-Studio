@@ -18,7 +18,6 @@ See the Apache Version 2.0 License for specific language governing permissions a
 ****************************************************************************/
 using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -34,7 +33,7 @@ namespace Microsoft.OpenXMLEditor
     // [CLSCompliant(false)]
     public class PartEditorFactory : IVsEditorFactory
     {
-        private OpenXMLEditor myPackage;
+        private readonly OpenXMLEditor myPackage;
         private ServiceProvider vsServiceProvider;
 
 
@@ -164,19 +163,15 @@ namespace Microsoft.OpenXMLEditor
                 // If physical view is non-null, create an editor window on an xml fragment.
 
                 // Verify that the base document is created
-                IVsHierarchy hierarchy;
-                uint itemIdFindAndLock;
-                IntPtr docDataFindAndLock;
-                uint docCookieFindAndLock;
-                IVsRunningDocumentTable runningDocTable = (IVsRunningDocumentTable)this.GetService(typeof(SVsRunningDocumentTable));
 
+                IVsRunningDocumentTable runningDocTable = (IVsRunningDocumentTable)this.GetService(typeof(SVsRunningDocumentTable));
                 int hr = runningDocTable.FindAndLockDocument(
                     (uint)_VSRDTFLAGS.RDT_NoLock,
                     pszMkDocument,
-                    out hierarchy,
-                    out itemIdFindAndLock,
-                    out docDataFindAndLock,
-                    out docCookieFindAndLock
+                    out IVsHierarchy hierarchy,
+                    out uint itemIdFindAndLock,
+                    out IntPtr docDataFindAndLock,
+                    out uint docCookieFindAndLock
                 );
 
                 string xml = string.Empty;
@@ -185,11 +180,13 @@ namespace Microsoft.OpenXMLEditor
                     // We are being asked to open a sub document before the main document is open.
                     // Let's create the main and put it in the RDT with a temporary EditLock that
                     // we will release after the sub document window is created.
-                    PackageEditorPane editor = new PackageEditorPane(myPackage);
-                    IVsPersistDocData mainDocData = editor;
-                    mainDocData.LoadDocData(pszMkDocument);
-                    // TODO editor.TemporaryLockDocument(runningDocTable, pvHier, itemid, pszMkDocument);
-                    xml = editor.GetXml(pszPhysicalView);
+                    using (PackageEditorPane editor = new PackageEditorPane(myPackage))
+                    {
+                        IVsPersistDocData mainDocData = editor;
+                        mainDocData.LoadDocData(pszMkDocument);
+                        // TODO editor.TemporaryLockDocument(runningDocTable, pvHier, itemid, pszMkDocument);
+                        xml = editor.GetXml(pszPhysicalView);
+                    }
                 }
                 else
                 {

@@ -36,7 +36,7 @@ namespace Microsoft.OpenXMLEditor
     [Guid("40212433-d144-4e5e-a730-089a5b843985")]
     public class PackageEditorFactory : IVsEditorFactory
     {
-        private OpenXMLEditor myPackage;
+        private readonly OpenXMLEditor myPackage;
         private ServiceProvider vsServiceProvider;
 
 

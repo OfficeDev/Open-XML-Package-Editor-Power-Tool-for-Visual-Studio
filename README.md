@@ -12,6 +12,6 @@ This Power Tool is a Visual Studio add-in that provides an easy way to parse and
 
 The extension is available on the Visual Studio Marketplace here: [Open XML Package Editor Power Tool for Modern Visual Studios](https://marketplace.visualstudio.com/items?itemName=bsivanov.OpenXMLPackageEditorforVisualStudio).
 
-This extension is fork of the original [Open XML Package Editor Power Tool for Visual Studio](https://github.com/OfficeDev/Open-XML-Package-Editor-Power-Tool-for-Visual-Studio) (also available on the Visual Studio Marketplace [here](https://marketplace.visualstudio.com/items?itemName=ChrisRae.OpenXMLPackageEditorforVisualStudio)), but working on the modern versions on Visual Studio (2012/2013/2015/2017).
+This extension is fork of the original [Open XML Package Editor Power Tool for Visual Studio](https://github.com/OfficeDev/Open-XML-Package-Editor-Power-Tool-for-Visual-Studio) (also available on the Visual Studio Marketplace [here](https://marketplace.visualstudio.com/items?itemName=ChrisRae.OpenXMLPackageEditorforVisualStudio)), but working on the modern versions on Visual Studio (2012/2013/2015/2017/2019).
 
 To compile the add-on yourself, you need Visual Studio 2017/2019 with 'Visual Studio extension development' workload installed.

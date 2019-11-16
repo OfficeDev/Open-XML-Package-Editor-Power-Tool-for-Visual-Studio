@@ -1,0 +1,8 @@
+﻿v.1.1.0
+Add support for changing the font in the document package tree by changing the Visual Studio settings in Tools -> Options -> Fonts and Colors -> Environment -> Plain Text -> Font settings.
+
+v.1.0.1
+Add support for Visual Studio 2019.
+
+v.1.0.0
+Add support for Visual Studio 2015-2017.

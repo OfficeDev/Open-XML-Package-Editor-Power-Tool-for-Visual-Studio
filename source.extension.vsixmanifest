@@ -1,29 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="ac41218c-c632-413c-b108-a9ecbbaabb90" Version="1.0.1" Language="en-US" Publisher="Borislav Ivanov"/>
-    <DisplayName>Open XML Package Editor for Modern Visual Studios</DisplayName>
-    <Description xml:space="preserve">Parse and edit Open Packaging Conventions files, including Word, Excel, PowerPoint and Visio documents. Fork of the original Open XML Package Editor for Visual Studio extension by Microsoft.</Description>
-    <License>eula.1033.txt</License>
-    <Icon>Package.ico</Icon>
-  </Metadata>
-  <Installation InstalledByMsi="false">
-    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.Pro" />
-    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.Ultimate" />
-    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.Premium" />
-  </Installation>
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-    <Dependency Id="Microsoft.VisualStudio.MPF.11.0" DisplayName="Visual Studio MPF 11.0" d:Source="Installed" Version="11.0" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-    <Asset Type="Microsoft Office SmartArt Graphic Color Variation" d:Source="File" Path="Templates\default.gcsx" />
-    <Asset Type="Microsoft Office SmartArt Graphic Layout" d:Source="File" Path="Templates\default.glox" />
-    <Asset Type="Microsoft Office SmartArt Graphic Quick Style" d:Source="File" Path="Templates\default.gqsx" />
-    <Asset Type="Open XML Package Project" d:Source="File" Path="Templates\OpenXMLEditor.vsdir" />
-  </Assets>
-  <Prerequisites>
-    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />
-  </Prerequisites>
+    <Metadata>
+        <Identity Id="ac41218c-c632-413c-b108-a9ecbbaabb90" Version="1.1.0" Language="en-US" Publisher="Borislav Ivanov"/>
+        <DisplayName>Open XML Package Editor for Modern Visual Studios</DisplayName>
+        <Description xml:space="preserve">Parse and edit Open Packaging Conventions files, including Word, Excel, PowerPoint and Visio documents. Fork of the original Open XML Package Editor for Visual Studio extension by Microsoft.</Description>
+        <License>eula.1033.txt</License>
+        <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
+        <Icon>Package.ico</Icon>
+        <Tags>OpenXML,Office Open XML, OOXML</Tags>
+    </Metadata>
+    <Installation InstalledByMsi="false">
+        <InstallationTarget Version="[11.0,17.0)" Id="Microsoft.VisualStudio.Pro" />
+    </Installation>
+    <Dependencies>
+    </Dependencies>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+        <Asset Type="Microsoft Office SmartArt Graphic Color Variation" d:Source="File" Path="Templates\default.gcsx" />
+        <Asset Type="Microsoft Office SmartArt Graphic Layout" d:Source="File" Path="Templates\default.glox" />
+        <Asset Type="Microsoft Office SmartArt Graphic Quick Style" d:Source="File" Path="Templates\default.gqsx" />
+        <Asset Type="Open XML Package Project" d:Source="File" Path="Templates\OpenXMLEditor.vsdir" />
+    </Assets>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
 </PackageManifest>

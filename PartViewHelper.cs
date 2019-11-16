@@ -135,10 +135,10 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private static bool HasToSave(uint pgrfSaveOptions)
-        {
-            return pgrfSaveOptions == (uint)__FRAMECLOSE.FRAMECLOSE_SaveIfDirty || pgrfSaveOptions == (uint)__FRAMECLOSE.FRAMECLOSE_PromptSave;
-        }
+        ////private static bool HasToSave(uint pgrfSaveOptions)
+        ////{
+        ////    return pgrfSaveOptions == (uint)__FRAMECLOSE.FRAMECLOSE_SaveIfDirty || pgrfSaveOptions == (uint)__FRAMECLOSE.FRAMECLOSE_PromptSave;
+        ////}
 
         public string PhysicalView
         {

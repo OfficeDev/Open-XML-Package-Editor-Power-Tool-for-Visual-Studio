@@ -84,7 +84,7 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+        private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (!(e.Node.Tag is DocumentPart))
                 return;

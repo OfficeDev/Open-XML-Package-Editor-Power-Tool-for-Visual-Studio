@@ -29,7 +29,7 @@ namespace Microsoft.OpenXMLEditor
     // [CLSCompliant(false)]
     public partial class NewExternalRelationshipDialog : Form
     {
-        public NewExternalRelationshipDialog(Microsoft.OpenXMLEditor.PackageEditorPane main)
+        public NewExternalRelationshipDialog()
         {
             InitializeComponent();
 

@@ -88,7 +88,7 @@ namespace Microsoft.OpenXMLEditor
             // 
             // reloadTimer
             // 
-            this.reloadTimer.Tick += new System.EventHandler(this.reloadTimer_Tick);
+            this.reloadTimer.Tick += new System.EventHandler(this.ReloadTimer_Tick);
             // 
             // tableLayoutPanel
             // 
@@ -143,7 +143,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(23, 22);
             this.buttonBack.Text = "Back";
-            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
+            this.buttonBack.Click += new System.EventHandler(this.ButtonBack_Click);
             // 
             // buttonForward
             // 
@@ -154,7 +154,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonForward.Name = "buttonForward";
             this.buttonForward.Size = new System.Drawing.Size(23, 22);
             this.buttonForward.Text = "Forward";
-            this.buttonForward.Click += new System.EventHandler(this.buttonForward_Click);
+            this.buttonForward.Click += new System.EventHandler(this.ButtonForward_Click);
             // 
             // buttonHistory
             // 
@@ -164,8 +164,8 @@ namespace Microsoft.OpenXMLEditor
             this.buttonHistory.Name = "buttonHistory";
             this.buttonHistory.Size = new System.Drawing.Size(13, 22);
             this.buttonHistory.Text = "History";
-            this.buttonHistory.DropDownOpening += new System.EventHandler(this.buttonHistory_DropDownOpening);
-            this.buttonHistory.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.buttonHistory_DropDownItemClicked);
+            this.buttonHistory.DropDownOpening += new System.EventHandler(this.ButtonHistory_DropDownOpening);
+            this.buttonHistory.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ButtonHistory_DropDownItemClicked);
             // 
             // toolStripSeparator8
             // 
@@ -181,7 +181,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonNewFolder.Name = "buttonNewFolder";
             this.buttonNewFolder.Size = new System.Drawing.Size(23, 22);
             this.buttonNewFolder.Text = "New Folder";
-            this.buttonNewFolder.Click += new System.EventHandler(this.buttonNewFolder_Click);
+            this.buttonNewFolder.Click += new System.EventHandler(this.ButtonNewFolder_Click);
             // 
             // buttonAddXmlPart
             // 
@@ -192,7 +192,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonAddXmlPart.Name = "buttonAddXmlPart";
             this.buttonAddXmlPart.Size = new System.Drawing.Size(23, 22);
             this.buttonAddXmlPart.Text = "Add New Part";
-            this.buttonAddXmlPart.Click += new System.EventHandler(this.buttonAddXmlPart_Click);
+            this.buttonAddXmlPart.Click += new System.EventHandler(this.ButtonAddXmlPart_Click);
             // 
             // buttonAddImagePart
             // 
@@ -203,7 +203,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonAddImagePart.Name = "buttonAddImagePart";
             this.buttonAddImagePart.Size = new System.Drawing.Size(23, 22);
             this.buttonAddImagePart.Text = "Import New Part";
-            this.buttonAddImagePart.Click += new System.EventHandler(this.buttonAddImagePart_Click);
+            this.buttonAddImagePart.Click += new System.EventHandler(this.ButtonAddImagePart_Click);
             // 
             // buttonAddInternalRel
             // 
@@ -214,7 +214,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonAddInternalRel.Name = "buttonAddInternalRel";
             this.buttonAddInternalRel.Size = new System.Drawing.Size(23, 22);
             this.buttonAddInternalRel.Text = "Add Internal Relationship";
-            this.buttonAddInternalRel.Click += new System.EventHandler(this.buttonAddInternalRel_Click);
+            this.buttonAddInternalRel.Click += new System.EventHandler(this.ButtonAddInternalRel_Click);
             // 
             // buttonAddExternalRel
             // 
@@ -225,7 +225,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonAddExternalRel.Name = "buttonAddExternalRel";
             this.buttonAddExternalRel.Size = new System.Drawing.Size(23, 22);
             this.buttonAddExternalRel.Text = "Add External Relationship";
-            this.buttonAddExternalRel.Click += new System.EventHandler(this.buttonAddExternalRel_Click);
+            this.buttonAddExternalRel.Click += new System.EventHandler(this.ButtonAddExternalRel_Click);
             // 
             // toolStripSeparator10
             // 
@@ -241,7 +241,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonProps.Name = "buttonProps";
             this.buttonProps.Size = new System.Drawing.Size(23, 22);
             this.buttonProps.Text = "Show Properties";
-            this.buttonProps.Click += new System.EventHandler(this.buttonProps_Click);
+            this.buttonProps.Click += new System.EventHandler(this.ButtonProps_Click);
             // 
             // buttonImport
             // 
@@ -252,7 +252,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonImport.Name = "buttonImport";
             this.buttonImport.Size = new System.Drawing.Size(23, 22);
             this.buttonImport.Text = "Import File to Part";
-            this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
+            this.buttonImport.Click += new System.EventHandler(this.ButtonImport_Click);
             // 
             // buttonExport
             // 
@@ -263,7 +263,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonExport.Name = "buttonExport";
             this.buttonExport.Size = new System.Drawing.Size(23, 22);
             this.buttonExport.Text = "Export Part to File";
-            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
+            this.buttonExport.Click += new System.EventHandler(this.ButtonExport_Click);
             // 
             // buttonEditPart
             // 
@@ -274,7 +274,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonEditPart.Name = "buttonEditPart";
             this.buttonEditPart.Size = new System.Drawing.Size(23, 22);
             this.buttonEditPart.Text = "Edit Part";
-            this.buttonEditPart.Click += new System.EventHandler(this.buttonEditPart_Click);
+            this.buttonEditPart.Click += new System.EventHandler(this.ButtonEditPart_Click);
             // 
             // buttonDeletePart
             // 
@@ -285,7 +285,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonDeletePart.Name = "buttonDeletePart";
             this.buttonDeletePart.Size = new System.Drawing.Size(23, 22);
             this.buttonDeletePart.Text = "Delete";
-            this.buttonDeletePart.Click += new System.EventHandler(this.buttonDeletePart_Click);
+            this.buttonDeletePart.Click += new System.EventHandler(this.ButtonDeletePart_Click);
             // 
             // toolStripSeparator1
             // 
@@ -300,7 +300,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonShowRels.Name = "buttonShowRels";
             this.buttonShowRels.Size = new System.Drawing.Size(23, 22);
             this.buttonShowRels.Text = "Show _rels Folders";
-            this.buttonShowRels.Click += new System.EventHandler(this.buttonShowRels_Click);
+            this.buttonShowRels.Click += new System.EventHandler(this.ButtonShowRels_Click);
             // 
             // buttonAbout
             // 
@@ -311,7 +311,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Size = new System.Drawing.Size(23, 22);
             this.buttonAbout.Text = "About OpenXMLEditor";
-            this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
+            this.buttonAbout.Click += new System.EventHandler(this.ButtonAbout_Click);
             // 
             // treeView
             // 
@@ -330,10 +330,10 @@ namespace Microsoft.OpenXMLEditor
             this.treeView.ShowRootLines = false;
             this.treeView.Size = new System.Drawing.Size(431, 249);
             this.treeView.TabIndex = 1;
-            this.treeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_NodeMouseDoubleClick);
-            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
-            this.treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_NodeMouseClick);
-            this.treeView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeView_KeyDown);
+            this.treeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView_NodeMouseDoubleClick);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
+            this.treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView_NodeMouseClick);
+            this.treeView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TreeView_KeyDown);
             // 
             // contextMenuDoc
             // 
@@ -355,7 +355,7 @@ namespace Microsoft.OpenXMLEditor
             this.newFolderToolStripMenuItem.Name = "newFolderToolStripMenuItem";
             this.newFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.newFolderToolStripMenuItem.Text = "New &Folder...";
-            this.newFolderToolStripMenuItem.Click += new System.EventHandler(this.buttonNewFolder_Click);
+            this.newFolderToolStripMenuItem.Click += new System.EventHandler(this.ButtonNewFolder_Click);
             // 
             // addNewPartToolStripMenuItem
             // 
@@ -364,7 +364,7 @@ namespace Microsoft.OpenXMLEditor
             this.addNewPartToolStripMenuItem.Name = "addNewPartToolStripMenuItem";
             this.addNewPartToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.addNewPartToolStripMenuItem.Text = "Add New &Part...";
-            this.addNewPartToolStripMenuItem.Click += new System.EventHandler(this.buttonAddXmlPart_Click);
+            this.addNewPartToolStripMenuItem.Click += new System.EventHandler(this.ButtonAddXmlPart_Click);
             // 
             // importNewPartToolStripMenuItem
             // 
@@ -373,7 +373,7 @@ namespace Microsoft.OpenXMLEditor
             this.importNewPartToolStripMenuItem.Name = "importNewPartToolStripMenuItem";
             this.importNewPartToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.importNewPartToolStripMenuItem.Text = "Import &New Part...";
-            this.importNewPartToolStripMenuItem.Click += new System.EventHandler(this.buttonAddImagePart_Click);
+            this.importNewPartToolStripMenuItem.Click += new System.EventHandler(this.ButtonAddImagePart_Click);
             // 
             // addInternalRelationshipToolStripMenuItem
             // 
@@ -382,7 +382,7 @@ namespace Microsoft.OpenXMLEditor
             this.addInternalRelationshipToolStripMenuItem.Name = "addInternalRelationshipToolStripMenuItem";
             this.addInternalRelationshipToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.addInternalRelationshipToolStripMenuItem.Text = "Add &Internal Relationship...";
-            this.addInternalRelationshipToolStripMenuItem.Click += new System.EventHandler(this.buttonAddInternalRel_Click);
+            this.addInternalRelationshipToolStripMenuItem.Click += new System.EventHandler(this.ButtonAddInternalRel_Click);
             // 
             // addExternalRelationshipToolStripMenuItem
             // 
@@ -391,7 +391,7 @@ namespace Microsoft.OpenXMLEditor
             this.addExternalRelationshipToolStripMenuItem.Name = "addExternalRelationshipToolStripMenuItem";
             this.addExternalRelationshipToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.addExternalRelationshipToolStripMenuItem.Text = "Add &External Relationship...";
-            this.addExternalRelationshipToolStripMenuItem.Click += new System.EventHandler(this.buttonAddExternalRel_Click);
+            this.addExternalRelationshipToolStripMenuItem.Click += new System.EventHandler(this.ButtonAddExternalRel_Click);
             // 
             // toolStripSeparator4
             // 
@@ -405,7 +405,7 @@ namespace Microsoft.OpenXMLEditor
             this.propertiesToolStripMenuItem.Name = "propertiesToolStripMenuItem";
             this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.propertiesToolStripMenuItem.Text = "P&roperties";
-            this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.buttonProps_Click);
+            this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.ButtonProps_Click);
             // 
             // imageList
             // 
@@ -450,7 +450,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
             this.toolStripMenuItem1.Text = "&Delete";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.buttonDeletePart_Click);
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.ButtonDeletePart_Click);
             // 
             // toolStripSeparator5
             // 
@@ -464,7 +464,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(176, 22);
             this.toolStripMenuItem3.Text = "New &Folder...";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.buttonNewFolder_Click);
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.ButtonNewFolder_Click);
             // 
             // toolStripMenuItem4
             // 
@@ -473,7 +473,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.Size = new System.Drawing.Size(176, 22);
             this.toolStripMenuItem4.Text = "Add New &Part...";
-            this.toolStripMenuItem4.Click += new System.EventHandler(this.buttonAddXmlPart_Click);
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.ButtonAddXmlPart_Click);
             // 
             // toolStripMenuItem5
             // 
@@ -482,7 +482,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
             this.toolStripMenuItem5.Size = new System.Drawing.Size(176, 22);
             this.toolStripMenuItem5.Text = "Import &New Part...";
-            this.toolStripMenuItem5.Click += new System.EventHandler(this.buttonAddImagePart_Click);
+            this.toolStripMenuItem5.Click += new System.EventHandler(this.ButtonAddImagePart_Click);
             // 
             // toolStripSeparator7
             // 
@@ -496,7 +496,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem10.Name = "toolStripMenuItem10";
             this.toolStripMenuItem10.Size = new System.Drawing.Size(176, 22);
             this.toolStripMenuItem10.Text = "P&roperties";
-            this.toolStripMenuItem10.Click += new System.EventHandler(this.buttonProps_Click);
+            this.toolStripMenuItem10.Click += new System.EventHandler(this.ButtonProps_Click);
             // 
             // contextMenuPart
             // 
@@ -521,7 +521,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem11.Name = "toolStripMenuItem11";
             this.toolStripMenuItem11.Size = new System.Drawing.Size(220, 22);
             this.toolStripMenuItem11.Text = "&Delete";
-            this.toolStripMenuItem11.Click += new System.EventHandler(this.buttonDeletePart_Click);
+            this.toolStripMenuItem11.Click += new System.EventHandler(this.ButtonDeletePart_Click);
             // 
             // toolStripSeparator9
             // 
@@ -536,7 +536,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem12.Name = "toolStripMenuItem12";
             this.toolStripMenuItem12.Size = new System.Drawing.Size(220, 22);
             this.toolStripMenuItem12.Text = "&Open";
-            this.toolStripMenuItem12.Click += new System.EventHandler(this.buttonEditPart_Click);
+            this.toolStripMenuItem12.Click += new System.EventHandler(this.ButtonEditPart_Click);
             // 
             // toolStripSeparator11
             // 
@@ -550,7 +550,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem16.Name = "toolStripMenuItem16";
             this.toolStripMenuItem16.Size = new System.Drawing.Size(220, 22);
             this.toolStripMenuItem16.Text = "Add &Internal Relationship...";
-            this.toolStripMenuItem16.Click += new System.EventHandler(this.buttonAddInternalRel_Click);
+            this.toolStripMenuItem16.Click += new System.EventHandler(this.ButtonAddInternalRel_Click);
             // 
             // toolStripMenuItem17
             // 
@@ -559,7 +559,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem17.Name = "toolStripMenuItem17";
             this.toolStripMenuItem17.Size = new System.Drawing.Size(220, 22);
             this.toolStripMenuItem17.Text = "Add &External Relationship...";
-            this.toolStripMenuItem17.Click += new System.EventHandler(this.buttonAddExternalRel_Click);
+            this.toolStripMenuItem17.Click += new System.EventHandler(this.ButtonAddExternalRel_Click);
             // 
             // toolStripMenuItem18
             // 
@@ -568,7 +568,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem18.Name = "toolStripMenuItem18";
             this.toolStripMenuItem18.Size = new System.Drawing.Size(220, 22);
             this.toolStripMenuItem18.Text = "I&mport...";
-            this.toolStripMenuItem18.Click += new System.EventHandler(this.buttonImport_Click);
+            this.toolStripMenuItem18.Click += new System.EventHandler(this.ButtonImport_Click);
             // 
             // toolStripMenuItem19
             // 
@@ -577,7 +577,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem19.Name = "toolStripMenuItem19";
             this.toolStripMenuItem19.Size = new System.Drawing.Size(220, 22);
             this.toolStripMenuItem19.Text = "E&xport...";
-            this.toolStripMenuItem19.Click += new System.EventHandler(this.buttonExport_Click);
+            this.toolStripMenuItem19.Click += new System.EventHandler(this.ButtonExport_Click);
             // 
             // toolStripSeparator12
             // 
@@ -591,7 +591,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem20.Name = "toolStripMenuItem20";
             this.toolStripMenuItem20.Size = new System.Drawing.Size(220, 22);
             this.toolStripMenuItem20.Text = "P&roperties";
-            this.toolStripMenuItem20.Click += new System.EventHandler(this.buttonProps_Click);
+            this.toolStripMenuItem20.Click += new System.EventHandler(this.ButtonProps_Click);
             // 
             // contextMenuRel
             // 
@@ -611,7 +611,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem21.Name = "toolStripMenuItem21";
             this.toolStripMenuItem21.Size = new System.Drawing.Size(134, 22);
             this.toolStripMenuItem21.Text = "&Delete";
-            this.toolStripMenuItem21.Click += new System.EventHandler(this.buttonDeletePart_Click);
+            this.toolStripMenuItem21.Click += new System.EventHandler(this.ButtonDeletePart_Click);
             // 
             // toolStripSeparator13
             // 
@@ -626,7 +626,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem22.Name = "toolStripMenuItem22";
             this.toolStripMenuItem22.Size = new System.Drawing.Size(134, 22);
             this.toolStripMenuItem22.Text = "&Open";
-            this.toolStripMenuItem22.Click += new System.EventHandler(this.buttonEditPart_Click);
+            this.toolStripMenuItem22.Click += new System.EventHandler(this.ButtonEditPart_Click);
             // 
             // toolStripSeparator14
             // 
@@ -640,7 +640,7 @@ namespace Microsoft.OpenXMLEditor
             this.toolStripMenuItem30.Name = "toolStripMenuItem30";
             this.toolStripMenuItem30.Size = new System.Drawing.Size(134, 22);
             this.toolStripMenuItem30.Text = "P&roperties";
-            this.toolStripMenuItem30.Click += new System.EventHandler(this.buttonProps_Click);
+            this.toolStripMenuItem30.Click += new System.EventHandler(this.ButtonProps_Click);
             // 
             // PackageEditorPane
             // 

@@ -124,7 +124,7 @@ namespace Microsoft.OpenXMLEditor
             this.treeView.ShowLines = false;
             this.treeView.Size = new System.Drawing.Size(299, 249);
             this.treeView.TabIndex = 3;
-            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
             // 
             // label4
             // 

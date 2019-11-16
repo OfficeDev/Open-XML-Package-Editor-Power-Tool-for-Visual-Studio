@@ -108,9 +108,9 @@ namespace Microsoft.OpenXMLEditor
 
         private ServiceProvider vsServiceProvider;
 
-        // This flag is true when we are asking the QueryEditQuerySave service if we can edit the
-        // file. It is used to avoid to have more than one request queued.
-        private bool gettingCheckoutStatus;
+        ////// This flag is true when we are asking the QueryEditQuerySave service if we can edit the
+        ////// file. It is used to avoid to have more than one request queued.
+        ////private bool gettingCheckoutStatus;
 
         // Find and replace related variables
         private object findState = null;
@@ -168,8 +168,7 @@ namespace Microsoft.OpenXMLEditor
 
         private void PrivateInit()
         {
-            gettingCheckoutStatus = false;
-            isFileReloading = false;
+            ////isFileReloading = false;
             fileChangeNotifyCookie = VSConstants.VSCOOKIE_NIL;
             changesToIgnore = 0;
         }
@@ -309,55 +308,55 @@ namespace Microsoft.OpenXMLEditor
             ErrorHandler.ThrowOnFailure(hr);
         }
 
-        /// <summary>
-        /// This function asks to the QueryEditQuerySave service if it is possible to
-        /// edit the file.
-        /// </summary>
-        private bool CanEditFile()
-        {
-            Debug.WriteLine("\t**** CanEditFile called ****");
+        /////// <summary>
+        /////// This function asks to the QueryEditQuerySave service if it is possible to
+        /////// edit the file.
+        /////// </summary>
+        ////private bool CanEditFile()
+        ////{
+        ////    Debug.WriteLine("\t**** CanEditFile called ****");
 
-            // Check the status of the recursion guard
-            if (gettingCheckoutStatus)
-                return false;
+        ////    // Check the status of the recursion guard
+        ////    if (gettingCheckoutStatus)
+        ////        return false;
 
-            try
-            {
-                // Set the recursion guard
-                gettingCheckoutStatus = true;
+        ////    try
+        ////    {
+        ////        // Set the recursion guard
+        ////        gettingCheckoutStatus = true;
 
-                // Get the QueryEditQuerySave service
-                IVsQueryEditQuerySave2 queryEditQuerySave = (IVsQueryEditQuerySave2)GetVsService(typeof(SVsQueryEditQuerySave));
+        ////        // Get the QueryEditQuerySave service
+        ////        IVsQueryEditQuerySave2 queryEditQuerySave = (IVsQueryEditQuerySave2)GetVsService(typeof(SVsQueryEditQuerySave));
 
-                // Now call the QueryEdit method to find the edit status of this file
-                string[] documents = { this.docPkg.FilePath };
+        ////        // Now call the QueryEdit method to find the edit status of this file
+        ////        string[] documents = { this.docPkg.FilePath };
 
-                // Note that this function can popup a dialog to ask the user to checkout the file.
-                // When this dialog is visible, it is possible to receive other request to change
-                // the file and this is the reason for the recursion guard.
-                int hr = queryEditQuerySave.QueryEditFiles(
-                    0,              // Flags
-                    1,              // Number of elements in the array
-                    documents,      // Files to edit
-                    null,           // Input flags
-                    null,           // Input array of VSQEQS_FILE_ATTRIBUTE_DATA
-                    out uint result,     // result of the checkout
-                    out uint outFlags    // Additional flags
-                );
-                if (ErrorHandler.Succeeded(hr) && (result == (uint)tagVSQueryEditResult.QER_EditOK))
-                {
-                    // In this case (and only in this case) we can return true from this function.
-                    return true;
-                }
-            }
-            finally
-            {
-                gettingCheckoutStatus = false;
-            }
-            return false;
-        }
+        ////        // Note that this function can popup a dialog to ask the user to checkout the file.
+        ////        // When this dialog is visible, it is possible to receive other request to change
+        ////        // the file and this is the reason for the recursion guard.
+        ////        int hr = queryEditQuerySave.QueryEditFiles(
+        ////            0,              // Flags
+        ////            1,              // Number of elements in the array
+        ////            documents,      // Files to edit
+        ////            null,           // Input flags
+        ////            null,           // Input array of VSQEQS_FILE_ATTRIBUTE_DATA
+        ////            out uint result,     // result of the checkout
+        ////            out uint outFlags    // Additional flags
+        ////        );
+        ////        if (ErrorHandler.Succeeded(hr) && (result == (uint)tagVSQueryEditResult.QER_EditOK))
+        ////        {
+        ////            // In this case (and only in this case) we can return true from this function.
+        ////            return true;
+        ////        }
+        ////    }
+        ////    finally
+        ////    {
+        ////        gettingCheckoutStatus = false;
+        ////    }
+        ////    return false;
+        ////}
 
-        private void reloadTimer_Tick(object sender, System.EventArgs e)
+        private void ReloadTimer_Tick(object sender, System.EventArgs e)
         {
             // Here we want to check if we can process the reload.
             // We don't want to show the reload popup when the shell is not the active window,
@@ -1796,7 +1795,7 @@ namespace Microsoft.OpenXMLEditor
 
         #region UI Event Handlers
 
-        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+        private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             ArrayList properties = new ArrayList();
 
@@ -1967,12 +1966,12 @@ namespace Microsoft.OpenXMLEditor
             return false;
         }
 
-        private void treeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void TreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             OpenTreeViewNode(e.Node, false);
         }
 
-        void treeView_KeyDown(object sender, KeyEventArgs e)
+        void TreeView_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -1987,7 +1986,7 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonBack_Click(object sender, EventArgs e)
+        private void ButtonBack_Click(object sender, EventArgs e)
         {
             if (curHistory == null || history.First == curHistory)
             {
@@ -2014,7 +2013,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonHistory.Enabled = true;
         }
 
-        private void buttonForward_Click(object sender, EventArgs e)
+        private void ButtonForward_Click(object sender, EventArgs e)
         {
             if (curHistory == null || history.Last == curHistory)
             {
@@ -2041,7 +2040,7 @@ namespace Microsoft.OpenXMLEditor
             this.buttonHistory.Enabled = true;
         }
 
-        void buttonHistory_DropDownOpening(object sender, System.EventArgs e)
+        void ButtonHistory_DropDownOpening(object sender, System.EventArgs e)
         {
             buttonHistory.DropDownItems.Clear();
             LinkedListNode<DocumentPart> node = history.First;
@@ -2055,7 +2054,7 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        void buttonHistory_DropDownItemClicked(object sender, System.Windows.Forms.ToolStripItemClickedEventArgs e)
+        void ButtonHistory_DropDownItemClicked(object sender, System.Windows.Forms.ToolStripItemClickedEventArgs e)
         {
             // reposition the history
             curHistory = (LinkedListNode<DocumentPart>)e.ClickedItem.Tag;
@@ -2076,7 +2075,7 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonNewFolder_Click(object sender, EventArgs e)
+        private void ButtonNewFolder_Click(object sender, EventArgs e)
         {
             using (NewFolderDialog dialog = new NewFolderDialog())
             {
@@ -2189,17 +2188,17 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonAddXmlPart_Click(object sender, EventArgs e)
+        private void ButtonAddXmlPart_Click(object sender, EventArgs e)
         {
             AddPart(true);
         }
 
-        private void buttonAddImagePart_Click(object sender, EventArgs e)
+        private void ButtonAddImagePart_Click(object sender, EventArgs e)
         {
             AddPart(false);
         }
 
-        private void buttonAddInternalRel_Click(object sender, EventArgs e)
+        private void ButtonAddInternalRel_Click(object sender, EventArgs e)
         {
             Debug.Assert(
                 treeView.SelectedNode.Tag is DocumentPart || treeView.SelectedNode.Tag is DocumentPackage,
@@ -2305,13 +2304,13 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonAddExternalRel_Click(object sender, EventArgs e)
+        private void ButtonAddExternalRel_Click(object sender, EventArgs e)
         {
             Debug.Assert(
                 treeView.SelectedNode.Tag is DocumentPart || treeView.SelectedNode.Tag is DocumentPackage,
                 "Current node must be a part or document node");
 
-            using (NewExternalRelationshipDialog dialog = new NewExternalRelationshipDialog(this))
+            using (NewExternalRelationshipDialog dialog = new NewExternalRelationshipDialog())
             {
                 if (dialog.ShowDialog(this) != DialogResult.OK)
                     return;
@@ -2398,14 +2397,14 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonProps_Click(object sender, EventArgs e)
+        private void ButtonProps_Click(object sender, EventArgs e)
         {
             IVsUIShell vsUIService = (IVsUIShell)GetVsService(typeof(IVsUIShell));
 
             if (vsUIService != null)
             {
                 Guid propertyBrowserGuid = System.ComponentModel.Design.StandardToolWindows.PropertyBrowser;
-                int hr = vsUIService.FindToolWindow(0, ref propertyBrowserGuid, out IVsWindowFrame toolFrame);
+                _ = vsUIService.FindToolWindow(0, ref propertyBrowserGuid, out IVsWindowFrame toolFrame);
 
                 if (toolFrame != null)
                 {
@@ -2422,7 +2421,7 @@ namespace Microsoft.OpenXMLEditor
             }
         }
 
-        private void buttonImport_Click(object sender, EventArgs e)
+        private void ButtonImport_Click(object sender, EventArgs e)
         {
             TreeNode node = this.treeView.SelectedNode;
             if (node == null || !(node.Tag is DocumentPart))
@@ -2502,12 +2501,12 @@ namespace Microsoft.OpenXMLEditor
             return null;
         }
 
-        private void buttonExport_Click(object sender, EventArgs e)
+        private void ButtonExport_Click(object sender, EventArgs e)
         {
             ExportPart();
         }
 
-        private void buttonEditPart_Click(object sender, EventArgs e)
+        private void ButtonEditPart_Click(object sender, EventArgs e)
         {
             TreeNode node = this.treeView.SelectedNode;
             OpenTreeViewNode(node, false);
@@ -2637,12 +2636,12 @@ namespace Microsoft.OpenXMLEditor
             docPkg.IsDirty = true;
         }
 
-        private void buttonDeletePart_Click(object sender, EventArgs e)
+        private void ButtonDeletePart_Click(object sender, EventArgs e)
         {
             DeleteNode();
         }
 
-        private void buttonShowRels_Click(object sender, EventArgs e)
+        private void ButtonShowRels_Click(object sender, EventArgs e)
         {
             showXmlRels = !showXmlRels;
             buttonShowRels.Checked = showXmlRels;
@@ -2651,7 +2650,7 @@ namespace Microsoft.OpenXMLEditor
             RefreshTree();
         }
 
-        private void buttonAbout_Click(object sender, EventArgs e)
+        private void ButtonAbout_Click(object sender, EventArgs e)
         {
             using (AboutForm dlg = new AboutForm())
             {
@@ -2668,7 +2667,7 @@ namespace Microsoft.OpenXMLEditor
             static public extern int GetActiveWindow();
         }
 
-        private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void TreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {

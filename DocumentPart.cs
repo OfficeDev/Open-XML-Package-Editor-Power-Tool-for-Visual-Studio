@@ -120,9 +120,9 @@ namespace Microsoft.OpenXMLEditor
                 {
                     writer.Write(value);
                     writer.Flush();
+
+                    stream.SetLength(stream.Position);
                 }
-                stream.SetLength(stream.Position);
-                stream.Close();
             }
         }
 

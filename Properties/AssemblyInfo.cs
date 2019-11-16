@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyTitle("Open XML Package Editor for Visual Studio")]
 [assembly: AssemblyDescription("Open XML Package Editor for Visual Studio")]
 [assembly: AssemblyCompany("Borislav Ivanov")]
